@@ -3,6 +3,6 @@
 int main()
 {   
     display d;
-    d.resistor();
+    d.resistor(0,50,50,50,50);
     return 0;
 }

@@ -12,7 +12,12 @@ class display
     public:
         display();
 
-        void resistor();
+        void resistor(float rotateangle,float rotatex,float rotatey,float transformx,float transformy);
+        void inductor();
+        void capacitor();
+        void ac_source();
+        void ground();
+        void wire();
 
         virtual ~display();
 

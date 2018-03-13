@@ -1,11 +1,10 @@
 #include "display.h"
-#include <iomanip>
 
 display::display()
 {
     cout<<"Constructor initialized";
     string start=R"foo(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" version="1.1">
+    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 800 800" version="1.1">
     <rect width="800" height="800" style="fill:rgb(250, 250, 252);stroke-width:1;stroke:rgb(110,0,0);opacity:1.0">
     </rect>)foo";
     outfile.open("output.svg");
@@ -19,13 +18,13 @@ display::~display()
     cout<<"Constructor destroyed";
 }
 
-void display::resistor(float rotateangle,float transformx,float transformy,string type,int count,float magnitude,string unit)
+void display::resistor(float rotateangle,float transformx,float transformy,string type,string name,float magnitude,string unit)
 {
-    string resistor="\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\ninkscape:label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\ninkscape:label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\ninkscape:connector-curvature=\"0\" />"+"\n<text x=\"13\" y=\"15\" font-size=\"3\" fill=\"black\" >"+type+to_string(count)+"("+to_string(magnitude)+unit+")\n</text>\n</g>\n</g>\n</g>";
+    string resistor="\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\ninkscape:label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\ninkscape:label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\ninkscape:connector-curvature=\"0\" />"+"\n<text x=\"13\" y=\"15\" font-size=\"3\" fill=\"black\" >"+type+name+"("+to_string(magnitude)+unit+")\n</text>\n</g>\n</g>\n</g>";
     outfile<<resistor;
 }
 
-void display::inductor(float rotateangle,float translatex,float translatey,string type,int count,float magnitude,string unit)
+void display::inductor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit)
 {
     string inductor1 ="\n <g \n inkscape:label=\"Inductor\" \n transform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+
     ")\" \n id=\"g4326\"> \n <g transform=\"translate("+to_string(translatex)+","+to_string(translatey);
@@ -102,11 +101,11 @@ void display::inductor(float rotateangle,float translatex,float translatey,strin
          id="path4340" />
     </g>
     <text x="370" y="545" font-size="3" fill="black" >
-    )foo" + type + to_string(count) + "(" + to_string(magnitude) + unit + ")" + "</text>\n</g>  </g> </g>";
+    )foo" + type +name+ "(" + to_string(magnitude) + unit + ")" + "</text>\n</g>  </g> </g>";
     outfile<<inductor1<<inductor2;
 }
 
-void display::capacitor(float rotateangle,float translatex,float translatey,string type,int count,float magnitude,string unit)
+void display::capacitor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit)
 {
     string capacitor= "\n<g\ninkscape:label=\"Capacitor\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+") translate("+to_string(translatex)+","+to_string(translatey)+")\""+R"foo(
      id="g4198">
@@ -139,11 +138,11 @@ void display::capacitor(float rotateangle,float translatex,float translatey,stri
          id="path4208"
          inkscape:connector-curvature="0" />
     </g>
-    <text x="13" y="45" font-size="3" fill="black" >\n)foo"+type+to_string(count)+"("+to_string(magnitude)+unit+")</text>\n</g>\n</g>";
+    <text x="13" y="45" font-size="3" fill="black" >\n)foo"+type+name+"("+to_string(magnitude)+unit+")</text>\n</g>\n</g>";
     outfile<<capacitor;
 }
 
-void display::ac_source(float rotateangle,float translatex,float translatey,string type,int count,float dcoffset,float amplitude,float frequency,float delay,float df)
+void display::ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df)
 {
     string voltage = "\n<g \n id=\"g4164\" \n transform=\"translate("+to_string(translatex)+","+to_string(translatey)+") rotate("+to_string(rotateangle)+",0,0)\">"
     R"foo(
@@ -164,7 +163,7 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
        id="path14021-7-1-7"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
 	<text x="-90" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
-	type+to_string(count)+" SINE ("+ to_string(dcoffset) +" "+ to_string(amplitude) +" "+to_string(frequency)+"Khz "+ to_string(delay)+"S  "+to_string(df)+")\n</text>\n</g>\n</g>";
+	type+name+" SINE ("+ to_string(dcoffset) +" "+ to_string(amplitude) +" "+to_string(frequency)+"Khz "+ to_string(delay)+"S  "+to_string(df)+")\n</text>\n</g>\n</g>";
     outfile<<voltage;
 }
 

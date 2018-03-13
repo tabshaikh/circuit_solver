@@ -1,101 +1,136 @@
 #include "display.h"
 #include "component.h"
-//flag ground 
 
-#include <vector>
+display d;      //Creating object d of display class
+extern vector <component> components; //data in form of a structure
+vector <float> netposx;//x coordinates of nets
+vector <float> netposy;//y coordinates of nets
+float offset=50;//offset of 50units
+int base=0,top=0;
 
-display d;//Creating object d of display class
-vector <string> netnames;
-vector <float> netposx;
-vector <float> netposy;
-vector <component> components;
-float offset=50;
-
-vector <int> nodes;
-
-void write_component(char type,float netposx,float netposy,int count,float value,string unit,float dcoffset,float amplitude,float frequency,float delay,float df)
-{
-    switch(type)
+void write_component(float netpositionx,float netpositiony)
+{            
+    switch(component[top].type)
     {
         case 'R':
-        d.resistor(rotateangle,netposx,netposy,"R",count,value,unit);
+        d.resistor(0,netpositionx,netpositiony,"R",component[top].name,component[top].magnitude,component[top].unit);
         break;
         case 'L':
-        d.inductor(rotateangle,netposx,netposy,"L",count,value,unit);
+        d.inductor(0,netpositionx,netpositiony,"L",component[top].name,component[top].magnitude,component[top].unit);
         break;
         case 'C':
-        d.capacitor(rotateangle,netposx,netposy,"C",count,value,unit);
+        d.capacitor(0,netpositionx,netpositiony,"C",component[top].name,component[top].magnitude,component[top].unit);
         break;
         case 'V':
-        d.ac_source(rotateangle,netposx,netposy,"V",count,dcoffset,amplitude,frequency,delay,df);
+        d.ac_source(90,netpositionx,netpositiony,"V",component[top].name,component[top].dcoffset,component[top].amplitude,component[top].frequency,component[top].delay,component[top].df);
         break;                                                                                                                                                                                      
         case 'I':
         break; 
     }
 }
-int main()
-{   
-    int sizearray=4;
-    netnames.push_back(components[0].start);
-    netnames.push_back(components[0].end);
-    netposx.push_back(400);
-    netposy.push_back(50);
-    write_component(components[0].type,netposx[0],netposy[0],components[0].count,components[0].value,components[0].unit,components[0].dcoffset,components[0].amplitude,components[0].frequency,components[0].delay,components[0].df);
-        
-    for(int i=1;i<sizearray;i++)
+
+void special_sort()
+{
+    std::sort(components.begin(), components.end(), make_member_comparer(&component::start));
+    for(int i=0;i<components.size();i++)
     {
-        int startfound=0,endfound=0;
-        for(int j=0;j<netnames.size();j++)
+      cout<<components[i].start<<components[i].end<<endl;
+    }
+    int num1=components[0].start;
+    int count1=0,count2=0;   
+    for(int i=0;i<components.size();i++)
+    {
+        if(num1!=components[i].a)
         {
-            float netposstart=0,netposend=0;
-            if((components[i].start).compare(netnames[j])==0)
-            {
-                startfound=1;
-                netposstart=j;
-            }
-            if((components[i].end).compare(netnames[j])==0)
-            {
-                startfound=1;
-                netposend=j;
-            }
+            num1=components[i].a;
+            std::sort(components.begin()+count1,components.begin()+count2,make_member_comparer(&component::b));
+            count1=count2=i;
         }
-        if(startfound==1 || endfound==1)
+        count2++;
+    }
+    for(int i=0;i<components.size();i++)
+    {
+      cout<<components[i].a<<components[i].b<<endl;
+    }
+}
+
+int searchnet(int n)
+{
+    for(int i=0;i<uniq.size();i++)
+    {
+        if(uniq[i]==n)
+        return(i);
+    }
+    return -1;
+}
+
+void draw(int diff)
+{
+    int startindex=searchnet(components[top].start());
+    int endindex=searchnet(components[top].end());
+    if(base%2==0)//make circuit up
+    {
+        if(diff!=0)
         {
-            if(endfound==1 && startfound==1)
-            {
-                    write_component(components[i].type,netposx[netposstart],netposy[0],components[i].count,components[i].value,components[i].unit,components[i].dcoffset,components[i].amplitude,components[i].frequency,components[i].delay,components[i].df);
-            }
-            else if(endfound==1)
-            {
-
-            }
-            else
-            {
-
-            }
+            d.wire(netposx[startindex],netposy[startindex],netposx[startindex],netposy[startindex]-diff);
+            d.wire(netposx[startindex],netposy[startindex],netposx[startindex],netposy[startindex]-diff);
+            d.wire(netposx[startindex],netposy[startindex]-diff,((netposx[endindex]+netposx[startindex])/2)-25,netposy[endindex]-diff);
+            d.wire(((netposx[endindex]+netposx[startindex])/2)+25,netposy[endindex]-diff,netposx[endindex],netposy[endindex]-diff);
+            write_component(((netposx[endindex]+netposx[startindex])/2)-25,netposy[startindex]-diff);
         }
         else
         {
-
+            d.wire(netposx[startindex],netposy[startindex],((netposx[endindex]+netposx[startindex])/2)-25,netposy[endindex]);
+            d.wire(((netposx[endindex]+netposx[startindex])/2)+25,netposy[endindex],netposx[endindex],netposy[endindex]);
+            write_component(((netposx[endindex]+netposx[startindex])/2)-25,diff+netposy[startindex]);
         }
     }
-    string netname[10];
-    float netpositionx[10];
-    float netpositiony[10];
-    netname[0]="Net3";
-    netname[1]="0";
-    netpositionx[0]=330;
-    netpositiony[0]=330;
-    netpositionx[1]=330;
-    netpositiony[1]=380;
-    display d;
-    d.resistor(90,netpositionx[0],netpositiony[0],"R",1,100.4,"OHM");
-  //d.inductor(0,100,50,"L",1,100.4,"KH");
-    d.capacitor(270,330,330,"C",1,100.4,"KF");
-  //d.ac_source(90,212,43,"V",1,0,0,0,0,0);
-    d.ground(0,netpositionx[1],netpositiony[1]);
-   // d.wire(50,50,50,25);
-   // d.wire(50,25,212,25);
-   // d.wire(212,25,212,43);
+    else
+    {
+        if(diff!=0)
+        {
+            d.wire(netposx[startindex],netposy[startindex],netposx[startindex],netposy[startindex]+diff);
+            d.wire(netposx[startindex],netposy[startindex],netposx[startindex],netposy[startindex]+diff);
+            d.wire(netposx[startindex],netposy[startindex]+diff,((netposx[endindex]+netposx[startindex])/2)-25,netposy[endindex]+diff);
+            d.wire(((netposx[endindex]+netposx[startindex])/2)+25,netposy[endindex]+diff,netposx[endindex],netposy[endindex]+diff);
+            write_component(((netposx[endindex]+netposx[startindex])/2)-25,netposy[startindex]+diff);
+        }
+        else
+        {
+            d.wire(netposx[startindex],netposy[startindex],((netposx[endindex]+netposx[startindex])/2)-25,netposy[endindex]);
+            d.wire(((netposx[endindex]+netposx[startindex])/2)+25,netposy[endindex],netposx[endindex],netposy[endindex]);
+            write_component(((netposx[endindex]+netposx[startindex])/2)-25,diff+netposy[startindex]);
+        }
+    }
+}
+
+void display()
+{
+    while(base!=components.size())
+    {
+        while(components[base].start==components[top].start)
+        {
+            diff=(top-base)*offset;
+            draw(diff);
+            top++;
+        }
+        base=top;
+    }
+}
+
+int main()
+{   
+    special_sort();
+    //intializing the coordinates of each netname
+    int startpos=150;
+    for(int i=0;i<uniq.size();i++)
+    {
+        netposx.pushback(startpos);
+        netposy.pushback(450);
+        startpos+=50;
+    }
+    //making ground point 
+    d.ground(0,netposx[0],netposy[0]);
+    display();
     return 0;
 }

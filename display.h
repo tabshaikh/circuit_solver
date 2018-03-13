@@ -4,6 +4,10 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <iomanip>
 
 using namespace std;
 
@@ -12,10 +16,10 @@ class display
     public:
         display();
 
-        void resistor(float rotateangle,float transformx,float transformy,string type,int count,float magnitude,string unit);
-        void inductor(float rotateangle,float translatex,float translatey,string type,int count,float magnitude,string unit);
-        void capacitor(float rotateangle,float translatex,float translatey,string type,int count,float magnitude,string unit);
-        void ac_source(float rotateangle,float translatex,float translatey,string type,int count,float dcoffset,float amplitude,float frequency,float delay,float df);
+        void resistor(float rotateangle,float transformx,float transformy,string type,string name,float magnitude,string unit);
+        void inductor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit);
+        void capacitor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit);
+        void ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df);
         void ground(float rotateangle,float translatex,float translatey);
         void wire(float x1,float y1,float x2,float y2);
 

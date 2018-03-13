@@ -23,7 +23,7 @@ void write_component(char type,float rotateangle,float netposx,float netposy,int
         break;
         case 'V':
         d.ac_source(rotateangle,netposx,netposy,"V",count,dcoffset,amplitude,frequency,delay,df);
-        break;
+        break;                                                                                                                                                                                      
         case 'I':
         break; 
     }
@@ -36,8 +36,7 @@ int main()
     netposx.push_back(400);
     netposy.push_back(50);
     write_component(components[0].type,90,netposx[0],netposy[0],components[0].count,components[0].value,components[0].unit,components[0].dcoffset,components[0].amplitude,components[0].frequency,components[0].delay,components[0].df);
-
-    .
+        
     for(int i=1;i<sizearray;i++)
     {
         int startfound=0,endfound=0;

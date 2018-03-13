@@ -6,6 +6,7 @@
     #include <iostream>
     #include <string.h>
     #include <vector>
+    #include <algorithm>
     #include "y.tab.h"
     #include "component.h"
     using namespace std;
@@ -15,6 +16,7 @@
     extern "C" int yylex();
     extern "C" FILE *yyin;
     vector <component> components;
+    vector <int> uniq;
 %}
 %token TYPE NAME NODE UNIT SINE NUM OPENBRACKET CLOSEBRACKET FREQ DELAY
 
@@ -238,6 +240,39 @@ void yyerror(char *s) {
     extern int yylineno;
     fprintf(stderr, "Line Number%d:-%s\n",yylineno, s);
 }
+int find(int s)
+{
+    for(int i=0;i<uniq.size();i++){
+        if(uniq[i] == s){
+            return i;
+        }
+    }
+    return -1;
+}
+void node()
+{
+    for(int i=0; i<components.size(); i++)
+    {
+        if(find(components[i].start)==-1)
+        {
+            uniq.push_back(components[i].start);
+        }
+        if(find(components[i].end)==-1)
+        {
+            uniq.push_back(components[i].end);
+        }
+    }
+    sort (uniq.begin(), uniq.begin()+4);
+}
+
+void printvector()
+{
+    for(int i=0;i<uniq.size();i++)
+    {
+        cout<<uniq[i]<<endl;
+    }
+}
+
 int main(void) {
    FILE *pt = fopen("top.cir", "r" );
     if(!pt)
@@ -250,4 +285,6 @@ int main(void) {
     {
         yyparse();
     }while (!feof(yyin));
+    node();
+    printvector();
 }

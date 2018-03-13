@@ -71,6 +71,7 @@
     #include <iostream>
     #include <string.h>
     #include <vector>
+    #include <algorithm>
     #include "y.tab.h"
     #include "component.h"
     using namespace std;
@@ -80,8 +81,9 @@
     extern "C" int yylex();
     extern "C" FILE *yyin;
     vector <component> components;
+    vector <int> uniq;
 
-#line 85 "y.tab.c" /* yacc.c:339  */
+#line 87 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -156,7 +158,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 160 "y.tab.c" /* yacc.c:358  */
+#line 162 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -454,8 +456,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    22,    22,    23,    24,    25,    26,    28,    29,    31,
-     122
+       0,    24,    24,    25,    26,    27,    28,    30,    31,    33,
+     124
 };
 #endif
 
@@ -1233,7 +1235,7 @@ yyreduce:
   switch (yyn)
     {
         case 9:
-#line 32 "parser.y" /* yacc.c:1646  */
+#line 34 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-3]));
                 char *unit = trim((yyvsp[0]));
@@ -1323,11 +1325,11 @@ yyreduce:
 
                 }
             }
-#line 1327 "y.tab.c" /* yacc.c:1646  */
+#line 1329 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 123 "parser.y" /* yacc.c:1646  */
+#line 125 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-10]));
                 if(type[0]!='V' && type[0]!='I')
@@ -1419,11 +1421,11 @@ yyreduce:
                     components.push_back(temp);
                 }
             }
-#line 1423 "y.tab.c" /* yacc.c:1646  */
+#line 1425 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1427 "y.tab.c" /* yacc.c:1646  */
+#line 1429 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1651,7 +1653,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 215 "parser.y" /* yacc.c:1906  */
+#line 217 "parser.y" /* yacc.c:1906  */
 
 char* trim(char* input)
 {
@@ -1678,6 +1680,39 @@ void yyerror(char *s) {
     extern int yylineno;
     fprintf(stderr, "Line Number%d:-%s\n",yylineno, s);
 }
+int find(int s)
+{
+    for(int i=0;i<uniq.size();i++){
+        if(uniq[i] == s){
+            return i;
+        }
+    }
+    return -1;
+}
+void node()
+{
+    for(int i=0; i<components.size(); i++)
+    {
+        if(find(components[i].start)==-1)
+        {
+            uniq.push_back(components[i].start);
+        }
+        if(find(components[i].end)==-1)
+        {
+            uniq.push_back(components[i].end);
+        }
+    }
+    sort (uniq.begin(), uniq.begin()+4);
+}
+
+void printvector()
+{
+    for(int i=0;i<uniq.size();i++)
+    {
+        cout<<uniq[i]<<endl;
+    }
+}
+
 int main(void) {
    FILE *pt = fopen("top.cir", "r" );
     if(!pt)
@@ -1690,4 +1725,6 @@ int main(void) {
     {
         yyparse();
     }while (!feof(yyin));
+    node();
+    printvector();
 }

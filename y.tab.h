@@ -80,5 +80,6 @@ typedef int YYSTYPE;
 extern YYSTYPE yylval;
 
 int yyparse (void);
+int parser();
 
 #endif /* !YY_YY_Y_TAB_H_INCLUDED  */

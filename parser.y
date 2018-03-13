@@ -273,7 +273,7 @@ void printvector()
     }
 }
 
-int main(void) {
+int parser(void) {
    FILE *pt = fopen("top.cir", "r" );
     if(!pt)
     {
@@ -286,5 +286,5 @@ int main(void) {
         yyparse();
     }while (!feof(yyin));
     node();
-    printvector();
+    // printvector();
 }

@@ -8,6 +8,7 @@ display::display()
     <rect width="800" height="800" style="fill:rgb(250, 250, 252);stroke-width:1;stroke:rgb(110,0,0);opacity:1.0">
     </rect>)foo";
     outfile.open("output.svg");
+    cout<<"Constructor initialized";
     outfile<<start;
 }
 

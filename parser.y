@@ -17,6 +17,7 @@
     extern "C" FILE *yyin;
     vector <component> components;
     vector <int> uniq;
+    int error=0;
 %}
 %token TYPE NAME NODE UNIT SINE NUM OPENBRACKET CLOSEBRACKET FREQ DELAY
 
@@ -237,6 +238,7 @@ char* trim(char* input)
     return output;	
 }
 void yyerror(char *s) {
+    error=-1;
     extern int yylineno;
     fprintf(stderr, "Line Number%d:-%s\n",yylineno, s);
 }
@@ -286,5 +288,6 @@ int parser(void) {
         yyparse();
     }while (!feof(yyin));
     node();
+    return error;
     // printvector();
 }

@@ -7,8 +7,9 @@ display d;//Creating object d of display class
 vector <string> netnames;
 vector <float> netposx;
 vector <float> netposy;
+float offset=50;
 
-void write_component(char type,float rotateangle,float netposx,float netposy,int count,float value,string unit,float dcoffset,float amplitude,float frequency,float delay,float df)
+void write_component(char type,float netposx,float netposy,int count,float value,string unit,float dcoffset,float amplitude,float frequency,float delay,float df)
 {
     switch(type)
     {
@@ -35,13 +36,14 @@ int main()
     netnames.push_back(components[0].end);
     netposx.push_back(400);
     netposy.push_back(50);
-    write_component(components[0].type,90,netposx[0],netposy[0],components[0].count,components[0].value,components[0].unit,components[0].dcoffset,components[0].amplitude,components[0].frequency,components[0].delay,components[0].df);
+    write_component(components[0].type,netposx[0],netposy[0],components[0].count,components[0].value,components[0].unit,components[0].dcoffset,components[0].amplitude,components[0].frequency,components[0].delay,components[0].df);
         
     for(int i=1;i<sizearray;i++)
     {
         int startfound=0,endfound=0;
         for(int j=0;j<netnames.size();j++)
         {
+            float netposstart=0,netposend=0;
             if((components[i].start).compare(netnames[j])==0)
             {
                 startfound=1;
@@ -57,7 +59,7 @@ int main()
         {
             if(endfound==1 && startfound==1)
             {
-
+                    write_component(components[i].type,netposx[netposstart],netposy[0],components[i].count,components[i].value,components[i].unit,components[i].dcoffset,components[i].amplitude,components[i].frequency,components[i].delay,components[i].df);
             }
             else if(endfound==1)
             {

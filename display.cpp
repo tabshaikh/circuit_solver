@@ -4,7 +4,10 @@
 display::display()
 {
     cout<<"Constructor initialized";
-    string start="<svg\nxmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\nxmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\nviewBox=\"0 0 800 800\"\nid=\"circuit\"\nversion=\"1.1\"\ninkscape:version=\"0.92.2 (unknown)\">\n<rect width=\"800\" height=\"800\" style=\"fill:rgb(250, 250, 252);stroke-width:1;stroke:rgb(110,0,0);opacity:1.0\">\n</rect>";
+    string start=R"foo(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" version="1.1">
+    <rect width="800" height="800" style="fill:rgb(250, 250, 252);stroke-width:1;stroke:rgb(110,0,0);opacity:1.0">
+    </rect>)foo";
     outfile.open("output.svg");
     outfile<<start;
 }

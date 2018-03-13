@@ -18,7 +18,7 @@ closed_bracket  ")"
                                 
 {SPACE}+(([0-9]+.[0-9]+)|([0-9]+))                  { return NUM; }
                                 
-[0-9]+(K|NF|NH|MH|MF){SPACE}*                       { yylval=strdup(yytext); return UNIT; }
+[0-9]+(K|NF|NH|MH|MF|KF|KH|PF|PH){SPACE}*           { yylval=strdup(yytext); return UNIT; }
                                 
 (SINE){SPACE}+                                      { return SINE; }
 

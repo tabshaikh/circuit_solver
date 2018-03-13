@@ -40,11 +40,11 @@ comp:       TYPE NODE NODE UNIT
                 {
                     yyerror("Register Units are Wrong");
                 }
-                else if(type[0]=='C' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M')&& unit[unitLength-1]!='F')
+                else if(type[0]=='C' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M'||unit[unitLength-2]!='K'||unit[unitLength-2]!='P')&& unit[unitLength-1]!='F')
                 {
                     yyerror("Capacitor Units are Wrong");
                 }
-                else if(type[0]=='L' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M')&& unit[unitLength-1]!='H')
+                else if(type[0]=='L' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M'||unit[unitLength-2]!='K'||unit[unitLength-2]!='P')&& unit[unitLength-1]!='H')
                 {
                     yyerror("Inductor Units are Wrong");
                 }

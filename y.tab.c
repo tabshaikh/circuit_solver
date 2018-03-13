@@ -82,8 +82,9 @@
     extern "C" FILE *yyin;
     vector <component> components;
     vector <int> uniq;
+    int error=0;
 
-#line 87 "y.tab.c" /* yacc.c:339  */
+#line 88 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -158,7 +159,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 162 "y.tab.c" /* yacc.c:358  */
+#line 163 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -456,8 +457,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    24,    24,    25,    26,    27,    28,    30,    31,    33,
-     124
+       0,    25,    25,    26,    27,    28,    29,    31,    32,    34,
+     125
 };
 #endif
 
@@ -1235,7 +1236,7 @@ yyreduce:
   switch (yyn)
     {
         case 9:
-#line 34 "parser.y" /* yacc.c:1646  */
+#line 35 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-3]));
                 char *unit = trim((yyvsp[0]));
@@ -1244,11 +1245,11 @@ yyreduce:
                 {
                     yyerror("Register Units are Wrong");
                 }
-                else if(type[0]=='C' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M')&& unit[unitLength-1]!='F')
+                else if(type[0]=='C' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M'||unit[unitLength-2]!='K'||unit[unitLength-2]!='P')&& unit[unitLength-1]!='F')
                 {
                     yyerror("Capacitor Units are Wrong");
                 }
-                else if(type[0]=='L' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M')&& unit[unitLength-1]!='H')
+                else if(type[0]=='L' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M'||unit[unitLength-2]!='K'||unit[unitLength-2]!='P')&& unit[unitLength-1]!='H')
                 {
                     yyerror("Inductor Units are Wrong");
                 }
@@ -1325,11 +1326,11 @@ yyreduce:
 
                 }
             }
-#line 1329 "y.tab.c" /* yacc.c:1646  */
+#line 1330 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 125 "parser.y" /* yacc.c:1646  */
+#line 126 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-10]));
                 if(type[0]!='V' && type[0]!='I')
@@ -1421,11 +1422,11 @@ yyreduce:
                     components.push_back(temp);
                 }
             }
-#line 1425 "y.tab.c" /* yacc.c:1646  */
+#line 1426 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1429 "y.tab.c" /* yacc.c:1646  */
+#line 1430 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1653,7 +1654,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 217 "parser.y" /* yacc.c:1906  */
+#line 218 "parser.y" /* yacc.c:1906  */
 
 char* trim(char* input)
 {
@@ -1677,6 +1678,7 @@ char* trim(char* input)
     return output;	
 }
 void yyerror(char *s) {
+    error=-1;
     extern int yylineno;
     fprintf(stderr, "Line Number%d:-%s\n",yylineno, s);
 }
@@ -1707,9 +1709,9 @@ void node()
 
 void printvector()
 {
-    for(int i=0;i<uniq.size();i++)
+    for(int i=0;i<components.size();i++)
     {
-        cout<<uniq[i]<<endl;
+        cout<<components[i].start<<"  "<<components[i].end<<endl;
     }
 }
 
@@ -1726,5 +1728,5 @@ int parser(void) {
         yyparse();
     }while (!feof(yyin));
     node();
-    // printvector();
+    return error;
 }

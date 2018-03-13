@@ -1,6 +1,4 @@
-R11 Net1 0 10K
-C1 Net0 Net1 100MF
-L1 Net0 0 10NH
-R2 Net0 0 1K
-C2 Net1 0 10NF 
-I1 Net0 0 SINE (    0    1.0   100Khz    0.0S    0.0  )
+R1 Net3 0 10K
+C1 Net2 Net3 100NF
+L1 Net1 Net2 10NH
+V1 Net1 0 SINE ( 0.2 1.0 10Khz 0.0S 0.0 )

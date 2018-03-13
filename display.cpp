@@ -2,21 +2,18 @@
 
 display::display()
 {
-    cout<<"Constructor initialized";
     string start=R"foo(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 800 800" version="1.1">
-    <rect width="800" height="800" style="fill:rgb(250, 250, 252);stroke-width:1;stroke:rgb(110,0,0);opacity:1.0">
-    </rect>)foo";
+    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 800 800" version="1.1">
+    <g id="g4" fill="none" transform="translate(-300.000000,-650.000000) matrix(1.7656463,0,0,1.7656463,324.90716,255.00942)">
+    )foo";
     outfile.open("output.svg");
-    cout<<"Constructor initialized";
     outfile<<start;
 }
 
 display::~display()
 {
-    string end="\n</svg>";
+    string end="\n</g>\n</svg>";
     outfile<<end;
-    cout<<"Constructor destroyed";
 }
 
 void display::resistor(float rotateangle,float transformx,float transformy,string type,string name,float magnitude,string unit)
@@ -139,7 +136,7 @@ void display::capacitor(float rotateangle,float translatex,float translatey,stri
          id="path4208"
          inkscape:connector-curvature="0" />
     </g>
-    <text x="13" y="45" font-size="3" fill="black" >\n)foo"+type+name+"("+to_string(magnitude)+unit+")</text>\n</g>\n</g>";
+    <text x="13" y="45" font-size="3" fill="black" >)foo"+type+name+"("+to_string(magnitude)+unit+")</text>\n</g>\n</g>";
     outfile<<capacitor;
 }
 
@@ -163,7 +160,9 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
        cx="8.4999971"
        id="path14021-7-1-7"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-	<text x="-90" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
+	<line x1="7.000000" y1="20.000000" x2="7.000000" y2="34.000000" stroke-width="1" stroke="black"/>
+    <line x1="7.000000" y1="0.000000" x2="7.000000" y2="-19.000000" stroke-width="1" stroke="black"/>
+    <text x="-90" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
 	type+name+" SINE ("+ to_string(dcoffset) +" "+ to_string(amplitude) +" "+to_string(frequency)+"Khz "+ to_string(delay)+"S  "+to_string(df)+")\n</text>\n</g>\n</g>";
     outfile<<voltage;
 }
@@ -178,4 +177,9 @@ void display::wire(float x1,float y1,float x2,float y2)
 {
    string line="\n<line x1=\""+to_string(x1)+"\" y1=\""+to_string(y1)+"\" x2=\""+to_string(x2)+"\" y2=\""+to_string(y2)+"\" stroke-width=\"1\" stroke=\"black\"/>";
     outfile<<line;
+}
+void display::text(float x1,float y1,string s)
+{
+   string text="\n<text x=\""+to_string(x1)+"\" y1=\""+to_string(y1)+"\" font-size=\"3\" fill=\"black\">"+s+"</text>";
+   outfile<<text;
 }

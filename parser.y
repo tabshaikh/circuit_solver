@@ -269,9 +269,9 @@ void node()
 
 void printvector()
 {
-    for(int i=0;i<uniq.size();i++)
+    for(int i=0;i<components.size();i++)
     {
-        cout<<uniq[i]<<endl;
+        cout<<components[i].start<<"  "<<components[i].end<<endl;
     }
 }
 
@@ -289,5 +289,4 @@ int parser(void) {
     }while (!feof(yyin));
     node();
     return error;
-    // printvector();
 }

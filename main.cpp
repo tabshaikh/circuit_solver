@@ -1,4 +1,5 @@
 #include "display.h"
+#include "component.h"
 //flag ground 
 
 #include <vector>
@@ -7,7 +8,10 @@ display d;//Creating object d of display class
 vector <string> netnames;
 vector <float> netposx;
 vector <float> netposy;
+vector <component> components;
 float offset=50;
+
+vector <int> nodes;
 
 void write_component(char type,float netposx,float netposy,int count,float value,string unit,float dcoffset,float amplitude,float frequency,float delay,float df)
 {

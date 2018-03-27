@@ -3,7 +3,7 @@
 display::display()
 {
     string start=R"foo(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" version="1.1">
+    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 800" version="1.1">
     <g id="g4" fill="none" transform="translate(-300.000000,-650.000000) matrix(1.7656463,0,0,1.7656463,324.90716,255.00942)">
     )foo";
     outfile.open("output.svg");
@@ -18,16 +18,16 @@ display::~display()
 
 void display::resistor(float rotateangle,float transformx,float transformy,string type,string name,float magnitude,string unit)
 {
-    string resistor="\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\n label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\n label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\n connector-curvature=\"0\" />"+"\n<text x=\"13\" y=\"15\" font-size=\"3\" fill=\"black\" >"+type+name+"(";    
+    string resistor="\n<a xlink:href=\"#0\">\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\n label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\n label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\n connector-curvature=\"0\" />"+"\n<text x=\"13\" y=\"15\" font-size=\"3\" fill=\"black\" >"+type+name+"(";    
     outfile<<resistor;
     outfile<<magnitude;
-    string remaining=unit+")\n</text>\n</g>\n</g>\n</g>";
+    string remaining=unit+")\n</text>\n</g>\n</g>\n</g>\n</a>";
     outfile<<remaining;
 }
 
 void display::inductor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit)
 {
-    string inductor1 ="\n <g \n  label=\"Inductor\" \n transform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+
+    string inductor1 ="\n<a xlink:href=\"#0\">\n <g \n  label=\"Inductor\" \n transform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+
     ")\" \n id=\"g4326\"> \n <g transform=\"translate("+to_string(translatex)+","+to_string(translatey);
 
     string inductor2 = R"foo(
@@ -105,13 +105,13 @@ void display::inductor(float rotateangle,float translatex,float translatey,strin
     )foo" + type +name+ "(";
     outfile<<inductor1<<inductor2;
     outfile<<magnitude;
-    string remaining= unit + ")" + "</text>\n</g>  </g> </g>";
+    string remaining= unit + ")" + "</text>\n</g>  \n</g> \n</g>\n</a>";
     outfile<<remaining;
 }
 
 void display::capacitor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit)
 {
-    string capacitor= "\n<g\n label=\"Capacitor\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+") translate("+to_string(translatex)+","+to_string(translatey)+")\""+R"foo(
+    string capacitor= "\n<a xlink:href=\"#0\">\n<g\n label=\"Capacitor\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+") translate("+to_string(translatex)+","+to_string(translatey)+")\""+R"foo(
      id="g4198">
     <g transform="translate(0,-30)">
     <g
@@ -145,7 +145,7 @@ void display::capacitor(float rotateangle,float translatex,float translatey,stri
     <text x="13" y="45" font-size="3" fill="black" >)foo"+type+name+"(";
     outfile<<capacitor;
     outfile<<magnitude;
-    string remaining=unit+")</text>\n</g>\n</g>";
+    string remaining=unit+")</text>\n</g>\n</g>\n</a>";
     outfile<<remaining;
 }
 
@@ -154,6 +154,7 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
     string voltage = "\n<g \n id=\"g4164\" \n transform=\"translate("+to_string(translatex)+","+to_string(translatey)+") rotate("+to_string(rotateangle)+",0,0)\">"
     R"foo(
     <g transform="translate(0,-7)">
+    <a xlink:href="#0">
     <g transform="translate(20,4.5)">
     <path
         nodetypes="czzzc"
@@ -171,6 +172,7 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
 	<line x1="7.000000" y1="20.000000" x2="7.000000" y2="34.000000" stroke-width="1" stroke="black"/>
     <line x1="7.000000" y1="0.000000" x2="7.000000" y2="-19.000000" stroke-width="1" stroke="black"/>
+    </a>
     <text x="-90" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
 	type+name+" SINE (";
     outfile<<voltage;    

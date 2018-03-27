@@ -19,7 +19,11 @@
     vector <int> uniq;
     int error=0;
 %}
-%token TYPE NAME NODE UNIT SINE NUM OPENBRACKET CLOSEBRACKET FREQ DELAY
+%union{
+    char * str;
+}
+%token <str> TYPE NAME NODE UNIT NUM FREQ DELAY
+%token  SINE OPENBRACKET CLOSEBRACKET
 
 %%
 program:    program statement '\n' 
@@ -182,7 +186,7 @@ source:     TYPE NODE NODE SINE OPENBRACKET NUM NUM FREQ DELAY NUM CLOSEBRACKET
                         int i1=0, i2=0;
                         while( i1 != len )
                         {
-                            if(isdigit(frequency1[i1]))
+                            if(isdigit(frequency1[i1])||frequency1[i1]=='.')
                             {
                                 frequency2[i2]=frequency1[i1];
                                 i2++;
@@ -200,7 +204,7 @@ source:     TYPE NODE NODE SINE OPENBRACKET NUM NUM FREQ DELAY NUM CLOSEBRACKET
                         int i1=0, i2=0;
                         while( i1 != len )
                         {
-                            if(isdigit(delay1[i1]))
+                            if(isdigit(delay1[i1])||delay1[i1]=='.')
                             {
                                 delay2[i2]=delay1[i1];
                                 i2++;

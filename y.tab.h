@@ -49,12 +49,12 @@ extern int yydebug;
     NAME = 259,
     NODE = 260,
     UNIT = 261,
-    SINE = 262,
-    NUM = 263,
-    OPENBRACKET = 264,
-    CLOSEBRACKET = 265,
-    FREQ = 266,
-    DELAY = 267
+    NUM = 262,
+    FREQ = 263,
+    DELAY = 264,
+    SINE = 265,
+    OPENBRACKET = 266,
+    CLOSEBRACKET = 267
   };
 #endif
 /* Tokens.  */
@@ -62,16 +62,26 @@ extern int yydebug;
 #define NAME 259
 #define NODE 260
 #define UNIT 261
-#define SINE 262
-#define NUM 263
-#define OPENBRACKET 264
-#define CLOSEBRACKET 265
-#define FREQ 266
-#define DELAY 267
+#define NUM 262
+#define FREQ 263
+#define DELAY 264
+#define SINE 265
+#define OPENBRACKET 266
+#define CLOSEBRACKET 267
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 22 "parser.y" /* yacc.c:1909  */
+
+    char * str;
+
+#line 82 "y.tab.h" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -81,5 +91,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 int parser();
-
 #endif /* !YY_YY_Y_TAB_H_INCLUDED  */

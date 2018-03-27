@@ -3,7 +3,7 @@
 display::display()
 {
     string start=R"foo(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 800 800" version="1.1">
+    <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" version="1.1">
     <g id="g4" fill="none" transform="translate(-300.000000,-650.000000) matrix(1.7656463,0,0,1.7656463,324.90716,255.00942)">
     )foo";
     outfile.open("output.svg");
@@ -18,126 +18,135 @@ display::~display()
 
 void display::resistor(float rotateangle,float transformx,float transformy,string type,string name,float magnitude,string unit)
 {
-    string resistor="\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\ninkscape:label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\ninkscape:label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\ninkscape:connector-curvature=\"0\" />"+"\n<text x=\"13\" y=\"15\" font-size=\"3\" fill=\"black\" >"+type+name+"("+to_string(magnitude)+unit+")\n</text>\n</g>\n</g>\n</g>";
+    string resistor="\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\n label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\n label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\n connector-curvature=\"0\" />"+"\n<text x=\"13\" y=\"15\" font-size=\"3\" fill=\"black\" >"+type+name+"(";    
     outfile<<resistor;
+    outfile<<magnitude;
+    string remaining=unit+")\n</text>\n</g>\n</g>\n</g>";
+    outfile<<remaining;
 }
 
 void display::inductor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit)
 {
-    string inductor1 ="\n <g \n inkscape:label=\"Inductor\" \n transform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+
+    string inductor1 ="\n <g \n  label=\"Inductor\" \n transform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+
     ")\" \n id=\"g4326\"> \n <g transform=\"translate("+to_string(translatex)+","+to_string(translatey);
 
     string inductor2 = R"foo(
     )">`
     <g transform="translate(-360,-530)">
     <g
-       inkscape:label="Inductor"
+        label="Inductor"
        id="g4328">
       <path
          d="m 360,530 h 13"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         inkscape:label="none"
+          label="none"
          id="path4330"
-         inkscape:connector-curvature="0" />
+          connector-curvature="0" />
       <path
          d="M 410,530 H 397"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         inkscape:label="none"
+          label="none"
          id="path4332"
-         inkscape:connector-curvature="0" />
+          connector-curvature="0" />
       <path
          d="m 379,530 a 3,3 0 0 1 -1.5,2.5980762114 3,3 0 0 1 -3,0 A 3,3 0 0 1 373,530"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         sodipodi:cx="376"
-         sodipodi:cy="530"
-         sodipodi:end="3.14159265359"
-         sodipodi:open="true"
-         sodipodi:rx="3"
-         sodipodi:ry="3"
-         sodipodi:start="0"
-         sodipodi:type="arc"
-         inkscape:label="arc"
+          cx="376"
+          cy="530"
+          end="3.14159265359"
+          open="true"
+          rx="3"
+          ry="3"
+          start="0"
+          type="arc"
+          label="arc"
          id="path4334" />
       <path
          d="m 385,530 a 3,3 0 0 1 -1.5,2.5980762114 3,3 0 0 1 -3,0 A 3,3 0 0 1 379,530"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         sodipodi:cx="382"
-         sodipodi:cy="530"
-         sodipodi:end="3.14159265359"
-         sodipodi:open="true"
-         sodipodi:rx="3"
-         sodipodi:ry="3"
-         sodipodi:start="0"
-         sodipodi:type="arc"
-         inkscape:label="arc"
+          cx="382"
+          cy="530"
+          end="3.14159265359"
+          open="true"
+          rx="3"
+          ry="3"
+          start="0"
+          type="arc"
+          label="arc"
          id="path4336" />
       <path
          d="m 391,530 a 3,3 0 0 1 -1.5,2.5980762114 3,3 0 0 1 -3,0 A 3,3 0 0 1 385,530"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         sodipodi:cx="388"
-         sodipodi:cy="530"
-         sodipodi:end="3.14159265359"
-         sodipodi:open="true"
-         sodipodi:rx="3"
-         sodipodi:ry="3"
-         sodipodi:start="0"
-         sodipodi:type="arc"
-         inkscape:label="arc"
+          cx="388"
+          cy="530"
+          end="3.14159265359"
+          open="true"
+          rx="3"
+          ry="3"
+          start="0"
+          type="arc"
+          label="arc"
          id="path4338" />
       <path
          d="m 397,530 a 3,3 0 0 1 -1.5,2.5980762114 3,3 0 0 1 -3,0 A 3,3 0 0 1 391,530"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         sodipodi:cx="394"
-         sodipodi:cy="530"
-         sodipodi:end="3.14159265359"
-         sodipodi:open="true"
-         sodipodi:rx="3"
-         sodipodi:ry="3"
-         sodipodi:start="0"
-         sodipodi:type="arc"
-         inkscape:label="arc"
+          cx="394"
+          cy="530"
+          end="3.14159265359"
+          open="true"
+          rx="3"
+          ry="3"
+          start="0"
+          type="arc"
+          label="arc"
          id="path4340" />
     </g>
     <text x="370" y="545" font-size="3" fill="black" >
-    )foo" + type +name+ "(" + to_string(magnitude) + unit + ")" + "</text>\n</g>  </g> </g>";
+    )foo" + type +name+ "(";
     outfile<<inductor1<<inductor2;
+    outfile<<magnitude;
+    string remaining= unit + ")" + "</text>\n</g>  </g> </g>";
+    outfile<<remaining;
 }
 
 void display::capacitor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit)
 {
-    string capacitor= "\n<g\ninkscape:label=\"Capacitor\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+") translate("+to_string(translatex)+","+to_string(translatey)+")\""+R"foo(
+    string capacitor= "\n<g\n label=\"Capacitor\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+") translate("+to_string(translatex)+","+to_string(translatey)+")\""+R"foo(
      id="g4198">
     <g transform="translate(0,-30)">
     <g
-       inkscape:label="Capacitor"
+        label="Capacitor"
        id="g4200">
       <path
          d="m 0,30 h 23"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         inkscape:label="none"
+          label="none"
          id="path4202"
-         inkscape:connector-curvature="0" />
+          connector-curvature="0" />
       <path
          d="M 50,30 H 27"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         inkscape:label="none"
+          label="none"
          id="path4204"
-         inkscape:connector-curvature="0" />
+          connector-curvature="0" />
       <path
          d="M 23,37 V 23"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         inkscape:label="none"
+          label="none"
          id="path4206"
-         inkscape:connector-curvature="0" />
+          connector-curvature="0" />
       <path
          d="M 27,37 V 23"
          style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         inkscape:label="none"
+          label="none"
          id="path4208"
-         inkscape:connector-curvature="0" />
+          connector-curvature="0" />
     </g>
-    <text x="13" y="45" font-size="3" fill="black" >)foo"+type+name+"("+to_string(magnitude)+unit+")</text>\n</g>\n</g>";
+    <text x="13" y="45" font-size="3" fill="black" >)foo"+type+name+"(";
     outfile<<capacitor;
+    outfile<<magnitude;
+    string remaining=unit+")</text>\n</g>\n</g>";
+    outfile<<remaining;
 }
 
 void display::ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df)
@@ -147,8 +156,8 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
     <g transform="translate(0,-7)">
     <g transform="translate(20,4.5)">
     <path
-       sodipodi:nodetypes="czzzc"
-       inkscape:connector-curvature="0"
+        nodetypes="czzzc"
+        connector-curvature="0"
        transform="rotate(110,0,0)"
        id="path5536-8-3"
        d="m 0.3478974,9.7865691 c 0.67934,2.0380199 2.07525,4.0760499 4.09466,4.0760499 2.01941,0 3.3781,-2.03803 4.05744,-4.0760499 0.6793396,-2.03803 2.0380296,-4.07605 4.0760496,-4.07605 2.03803,0 3.39671,2.03802 4.07605,4.07605"
@@ -163,8 +172,9 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
 	<line x1="7.000000" y1="20.000000" x2="7.000000" y2="34.000000" stroke-width="1" stroke="black"/>
     <line x1="7.000000" y1="0.000000" x2="7.000000" y2="-19.000000" stroke-width="1" stroke="black"/>
     <text x="-90" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
-	type+name+" SINE ("+ to_string(dcoffset) +" "+ to_string(amplitude) +" "+to_string(frequency)+"Khz "+ to_string(delay)+"S  "+to_string(df)+")\n</text>\n</g>\n</g>";
-    outfile<<voltage;
+	type+name+" SINE (";
+    outfile<<voltage;    
+    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<"Khz "<<delay<<"S  "<<df<<")\n</text>\n</g>\n</g>";
 }
 
 void display::ground(float rotateangle,float translatex,float translatey)

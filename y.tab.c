@@ -123,12 +123,12 @@ extern int yydebug;
     NAME = 259,
     NODE = 260,
     UNIT = 261,
-    SINE = 262,
-    NUM = 263,
-    OPENBRACKET = 264,
-    CLOSEBRACKET = 265,
-    FREQ = 266,
-    DELAY = 267
+    NUM = 262,
+    FREQ = 263,
+    DELAY = 264,
+    SINE = 265,
+    OPENBRACKET = 266,
+    CLOSEBRACKET = 267
   };
 #endif
 /* Tokens.  */
@@ -136,16 +136,26 @@ extern int yydebug;
 #define NAME 259
 #define NODE 260
 #define UNIT 261
-#define SINE 262
-#define NUM 263
-#define OPENBRACKET 264
-#define CLOSEBRACKET 265
-#define FREQ 266
-#define DELAY 267
+#define NUM 262
+#define FREQ 263
+#define DELAY 264
+#define SINE 265
+#define OPENBRACKET 266
+#define CLOSEBRACKET 267
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 22 "parser.y" /* yacc.c:355  */
+
+    char * str;
+
+#line 156 "y.tab.c" /* yacc.c:355  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -159,7 +169,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 163 "y.tab.c" /* yacc.c:358  */
+#line 173 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -401,7 +411,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   18
+#define YYLAST   17
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  15
@@ -457,8 +467,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    25,    25,    26,    27,    28,    29,    31,    32,    34,
-     125
+       0,    29,    29,    30,    31,    32,    33,    35,    36,    38,
+     129
 };
 #endif
 
@@ -467,8 +477,8 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "TYPE", "NAME", "NODE", "UNIT", "SINE",
-  "NUM", "OPENBRACKET", "CLOSEBRACKET", "FREQ", "DELAY", "'\\n'", "' '",
+  "$end", "error", "$undefined", "TYPE", "NAME", "NODE", "UNIT", "NUM",
+  "FREQ", "DELAY", "SINE", "OPENBRACKET", "CLOSEBRACKET", "'\\n'", "' '",
   "$accept", "program", "statement", "comp", "source", YY_NULLPTR
 };
 #endif
@@ -483,10 +493,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -9
+#define YYPACT_NINF -10
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-9)))
+  (!!((Yystate) == (-10)))
 
 #define YYTABLE_NINF -1
 
@@ -497,9 +507,9 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -9,     0,    -9,    -1,    -9,    -9,    -8,    -9,    -9,     1,
-      -9,    -5,    -9,    -2,     2,     3,    -3,     4,     7,     8,
-      -9
+     -10,     0,   -10,    -3,   -10,   -10,    -9,   -10,   -10,     1,
+     -10,    -5,   -10,    -4,     2,     3,     4,    -1,     8,     5,
+     -10
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -515,7 +525,7 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -9,    -9,    -9,    -9,    -9
+     -10,   -10,   -10,   -10,   -10
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -529,14 +539,14 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,    12,    13,     3,     9,    10,    11,    14,    17,     0,
-      15,    16,     0,     4,     5,    19,    18,     0,    20
+       2,    12,     9,     3,    10,    13,    11,    14,    18,    15,
+      16,     0,    17,     4,     5,    19,     0,    20
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     6,     7,     3,     5,    13,     5,     9,    11,    -1,
-       8,     8,    -1,    13,    14,     8,    12,    -1,    10
+       0,     6,     5,     3,    13,    10,     5,    11,     9,     7,
+       7,    -1,     8,    13,    14,     7,    -1,    12
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -544,8 +554,8 @@ static const yytype_int8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,    16,     0,     3,    13,    14,    17,    18,    19,     5,
-      13,     5,     6,     7,     9,     8,     8,    11,    12,     8,
-      10
+      13,     5,     6,    10,    11,     7,     7,     8,     9,     7,
+      12
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -1236,10 +1246,10 @@ yyreduce:
   switch (yyn)
     {
         case 9:
-#line 35 "parser.y" /* yacc.c:1646  */
+#line 39 "parser.y" /* yacc.c:1646  */
     {
-                char *type = trim((yyvsp[-3]));
-                char *unit = trim((yyvsp[0]));
+                char *type = trim((yyvsp[-3].str));
+                char *unit = trim((yyvsp[0].str));
                 int unitLength = strlen(unit);
                 if(type[0]=='R' && unit[unitLength-1]!='K')
                 {
@@ -1256,7 +1266,7 @@ yyreduce:
                 else
                 {
                     char *start,*end,*mag,*unit;
-                    char *node1 = trim((yyvsp[-2]));
+                    char *node1 = trim((yyvsp[-2].str));
                     if(node1[0]=='0')
                     {   start=new char[1];
                         start="-1";
@@ -1274,7 +1284,7 @@ yyreduce:
                         start[i-3]=NULL;
                     }
 
-                    char *node2 = trim((yyvsp[-1]));
+                    char *node2 = trim((yyvsp[-1].str));
                     if(node2[0]=='0')
                     {   end=new char[1];
                         end="-1";
@@ -1292,7 +1302,7 @@ yyreduce:
                         end[i-3]=NULL;
                     }
 
-                    char *units = trim((yyvsp[0]));
+                    char *units = trim((yyvsp[0].str));
                     {
                         int len = strlen(units);
                         mag=new char[len];
@@ -1326,13 +1336,13 @@ yyreduce:
 
                 }
             }
-#line 1330 "y.tab.c" /* yacc.c:1646  */
+#line 1340 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 126 "parser.y" /* yacc.c:1646  */
+#line 130 "parser.y" /* yacc.c:1646  */
     {
-                char *type = trim((yyvsp[-10]));
+                char *type = trim((yyvsp[-10].str));
                 if(type[0]!='V' && type[0]!='I')
                 {
                     yyerror("No such source availble");
@@ -1340,7 +1350,7 @@ yyreduce:
                 else
                 {
                     char *start,*end;
-                    char *node1 = trim((yyvsp[-9]));
+                    char *node1 = trim((yyvsp[-9].str));
                     if(node1[0]=='0')
                     {   start=new char[1];
                         start="-1";
@@ -1358,7 +1368,7 @@ yyreduce:
                         start[i-3]=NULL;
                     }
 
-                    char *node2 = trim((yyvsp[-8]));
+                    char *node2 = trim((yyvsp[-8].str));
                     if(node2[0]=='0')
                     {   end=new char[1];
                         end="-1";
@@ -1380,9 +1390,9 @@ yyreduce:
                     temp.name = string((type+1));
                     temp.start = atoi(start)<atoi(end)? atoi(start):atoi(end);
                     temp.end = atoi(start)>atoi(end)? atoi(start):atoi(end);
-                    temp.dcoffset = atof((yyvsp[-5]));
-                    temp.amplitude = atof((yyvsp[-4]));
-                    char *frequency1 = trim((yyvsp[-3]));
+                    temp.dcoffset = atof((yyvsp[-5].str));
+                    temp.amplitude = atof((yyvsp[-4].str));
+                    char *frequency1 = trim((yyvsp[-3].str));
                     char *frequency2;
                     {
                         int len = strlen(frequency1);
@@ -1390,7 +1400,7 @@ yyreduce:
                         int i1=0, i2=0;
                         while( i1 != len )
                         {
-                            if(isdigit(frequency1[i1]))
+                            if(isdigit(frequency1[i1])||frequency1[i1]=='.')
                             {
                                 frequency2[i2]=frequency1[i1];
                                 i2++;
@@ -1400,7 +1410,7 @@ yyreduce:
                         frequency2[i2]=NULL;
                     }
                     temp.f = atof(frequency2);
-                    char *delay1 = trim((yyvsp[-2]));
+                    char *delay1 = trim((yyvsp[-2].str));
                     char *delay2;
                     {
                         int len = strlen(delay1);
@@ -1408,7 +1418,7 @@ yyreduce:
                         int i1=0, i2=0;
                         while( i1 != len )
                         {
-                            if(isdigit(delay1[i1]))
+                            if(isdigit(delay1[i1])||delay1[i1]=='.')
                             {
                                 delay2[i2]=delay1[i1];
                                 i2++;
@@ -1418,15 +1428,15 @@ yyreduce:
                         delay2[i2]=NULL;
                     }
                     temp.delay = atof(delay2);
-                    temp.dampingfactor=atof((yyvsp[-1]));
+                    temp.dampingfactor=atof((yyvsp[-1].str));
                     components.push_back(temp);
                 }
             }
-#line 1426 "y.tab.c" /* yacc.c:1646  */
+#line 1436 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1430 "y.tab.c" /* yacc.c:1646  */
+#line 1440 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1654,7 +1664,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 218 "parser.y" /* yacc.c:1906  */
+#line 222 "parser.y" /* yacc.c:1906  */
 
 char* trim(char* input)
 {

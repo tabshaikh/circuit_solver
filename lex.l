@@ -6,31 +6,35 @@
     void yyerror(char *);
 %}
 %option yylineno
+%option caseless
 
 SPACE           " "
 open_bracket    "("
 closed_bracket  ")"
 %%
 
-{SPACE}*[RCLVI][a-zA-Z0-9]+{SPACE}+                 { yylval=strdup(yytext); return TYPE; }
+{SPACE}*[RCLVI][a-zA-Z0-9]+                { yylval.str=strdup(yytext); return TYPE; }
                                 
-((Net|NET)[0-9]+|0){SPACE}+                         { yylval=strdup(yytext); return NODE; }
-                                
-{SPACE}+(([0-9]+.[0-9]+)|([0-9]+))                  { return NUM; }
-                                
-[0-9]+(K|NF|NH|MH|MF|KF|KH|PF|PH){SPACE}*           { yylval=strdup(yytext); return UNIT; }
-                                
-(SINE){SPACE}+                                      { return SINE; }
+([0-9]+(.[0-9]+)?){SPACE}+         { yylval.str=strdup(yytext); printf((yylval.str)); return NUM; }
 
-{SPACE}+(([0-9]+.[0-9]+)|[0-9]+)(Khz)               { return FREQ; }
 
-{SPACE}+(([0-9]+.[0-9]+)|[0-9]+)(S)                 { return DELAY; }
+{SPACE}+(NET[0-9]+|0)                               { yylval.str=strdup(yytext); return NODE; }
+                                
+                                
+{SPACE}+[0-9]+(K|NF|NH|MH|MF|KF|KH|PF|PH){SPACE}*           { yylval.str=strdup(yytext); return UNIT; }
+                                
+{SPACE}+(SINE)                                      { return SINE; }
+
+(([0-9]+.[0-9]+)|[0-9]+)(Khz){SPACE}+               { yylval.str=strdup(yytext); return FREQ; }
+
+(([0-9]+.[0-9]+)|[0-9]+)(S){SPACE}+                 { yylval.str=strdup(yytext); return DELAY; }
+
                                                                                                                                                                                                                        
-[ \n]                                               { return *yytext; }
+[\n]                                               { return *yytext; }
 
-{SPACE}*{open_bracket}                              { return OPENBRACKET; }
+{SPACE}+{open_bracket}{SPACE}*                                      { return OPENBRACKET; }
 
-{SPACE}*{closed_bracket}{SPACE}*                    { return CLOSEBRACKET; }
+{closed_bracket}{SPACE}*                    { return CLOSEBRACKET; }
 
 .                                                   yyerror("invalid character");
 

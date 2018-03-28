@@ -18,7 +18,7 @@ display::~display()
 
 void display::resistor(float rotateangle,float transformx,float transformy,string type,string name,float magnitude,string unit)
 {
-    string resistor="\n<a xlink:href=\"#0\">\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\n label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\n label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\n connector-curvature=\"0\" />"+"\n<text x=\"13\" y=\"15\" font-size=\"3\" fill=\"black\" >"+type+name+"(";    
+    string resistor="\n<a xlink:href=\"#0\">\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\n label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\n label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\n connector-curvature=\"0\" />"+"\n<text x=\"20\" y=\"10\" font-size=\"3\" fill=\"black\" >"+type+name+"(";    
     outfile<<resistor;
     outfile<<magnitude;
     string remaining=unit+")\n</text>\n</g>\n</g>\n</g>\n</a>";
@@ -101,7 +101,7 @@ void display::inductor(float rotateangle,float translatex,float translatey,strin
           label="arc"
          id="path4340" />
     </g>
-    <text x="370" y="545" font-size="3" fill="black" >
+    <text x="380" y="540" font-size="3" fill="black" >
     )foo" + type +name+ "(";
     outfile<<inductor1<<inductor2;
     outfile<<magnitude;
@@ -142,7 +142,7 @@ void display::capacitor(float rotateangle,float translatex,float translatey,stri
          id="path4208"
           connector-curvature="0" />
     </g>
-    <text x="13" y="45" font-size="3" fill="black" >)foo"+type+name+"(";
+    <text x="20" y="45" font-size="3" fill="black" >)foo"+type+name+"(";
     outfile<<capacitor;
     outfile<<magnitude;
     string remaining=unit+")</text>\n</g>\n</g>\n</a>";
@@ -170,19 +170,41 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
        cx="8.4999971"
        id="path14021-7-1-7"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-	<line x1="7.000000" y1="20.000000" x2="7.000000" y2="34.000000" stroke-width="1" stroke="black"/>
+	<line x1="7.000000" y1="20.000000" x2="7.000000" y2="32.50000" stroke-width="1" stroke="black"/>
     <line x1="7.000000" y1="0.000000" x2="7.000000" y2="-19.000000" stroke-width="1" stroke="black"/>
     </a>
-    <text x="-90" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
+    <text x="-80" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
 	type+name+" SINE (";
     outfile<<voltage;    
     outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<"Khz "<<delay<<"S  "<<df<<")\n</text>\n</g>\n</g>";
 }
 
-void display::ground(float rotateangle,float translatex,float translatey)
+void display::ground(float rotateangle,float translatex,float translatey,std::vector<int> uniq)
 {
-    string ground ="\n<g\nid=\"layer1\" transform=\"translate("+to_string(translatex)+","+to_string(translatey)+")rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+")scale(0.7)\">\n<g transform=\"translate(-12,-3)\">\n<path\nd=\"M 0.5,24.5 L 24.5,24.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4098\" />\n<path\nd=\"M 4.5,27.5 L 20.5,27.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4100\" />\n<path\nd=\"M 16.5,30.5 L 8.5,30.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4102\" />\n<path\nd=\"M 12.5,24.5 L 12.5,4.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4104\" />\n</g>\n</g>";
+    string ground ="\n<g\nid=\"layer1\" transform=\"translate("+to_string(translatex)+","+to_string(translatey)+")rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+")scale(0.7)\">\n<g transform=\"translate(-12,-3)\">";
     outfile<<ground;
+    int pos=0;
+    for (int i=0;i<uniq.size();i++)
+    {
+      if(i==0)
+      {
+        text(pos,475,"Net "+to_string(uniq[i]+1));
+        pos+=75;
+      }
+      else if(i==uniq.size()-1)
+      {
+        text(pos+5,475,"Net "+to_string(uniq[i]));
+        pos+=75;
+      }
+      else
+        {
+          text(pos,475,"Net "+to_string(uniq[i]));
+        pos+=75;
+      }
+
+    }
+    string part2 ="\n<path\nd=\"M 0.5,24.5 L 24.5,24.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4098\" />\n<path\nd=\"M 4.5,27.5 L 20.5,27.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4100\" />\n<path\nd=\"M 16.5,30.5 L 8.5,30.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4102\" />\n<path\nd=\"M 12.5,24.5 L 12.5,4.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4104\" />\n</g>\n</g>";
+    outfile<<part2;
 }
 
 void display::wire(float x1,float y1,float x2,float y2)

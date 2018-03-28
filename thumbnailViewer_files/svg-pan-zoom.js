@@ -1797,6 +1797,7 @@ module.exports = {
    */
 , isDblClick: function(evt, prevEvt) {
     // Double click detected by browser
+    this.fill({ color: '#f06' })
     if (evt.detail === 2) {
       return true;
     }

@@ -148,7 +148,7 @@ int main()
             startpos+=50;
         }
         //making ground point 
-        d.ground(0,netposx[0],netposy[0]-1);
+        d.ground(0,netposx[0],netposy[0]-1,uniq);
         display_circuit();
     }
     return 0;

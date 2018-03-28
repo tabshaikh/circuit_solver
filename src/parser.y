@@ -24,7 +24,6 @@
 }
 %token <str> TYPE NAME NODE UNIT NUM FREQ DELAY
 %token  SINE OPENBRACKET CLOSEBRACKET
-
 %%
 program:    program statement '\n' 
             | program statement
@@ -280,7 +279,7 @@ void printvector()
 }
 
 int parser(void) {
-   FILE *pt = fopen("top.cir", "r" );
+   FILE *pt = fopen(inputfile, "r" );
     if(!pt)
     {
         cout << "No such file exists" << endl;

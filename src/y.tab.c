@@ -467,8 +467,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    29,    29,    30,    31,    32,    33,    35,    36,    38,
-     129
+       0,    28,    28,    29,    30,    31,    32,    34,    35,    37,
+     128
 };
 #endif
 
@@ -1246,7 +1246,7 @@ yyreduce:
   switch (yyn)
     {
         case 9:
-#line 39 "parser.y" /* yacc.c:1646  */
+#line 38 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-3].str));
                 char *unit = trim((yyvsp[0].str));
@@ -1340,7 +1340,7 @@ yyreduce:
     break;
 
   case 10:
-#line 130 "parser.y" /* yacc.c:1646  */
+#line 129 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-10].str));
                 if(type[0]!='V' && type[0]!='I')
@@ -1664,7 +1664,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 222 "parser.y" /* yacc.c:1906  */
+#line 221 "parser.y" /* yacc.c:1906  */
 
 char* trim(char* input)
 {
@@ -1726,7 +1726,7 @@ void printvector()
 }
 
 int parser(void) {
-   FILE *pt = fopen("top.cir", "r" );
+   FILE *pt = fopen(inputfile, "r" );
     if(!pt)
     {
         cout << "No such file exists" << endl;

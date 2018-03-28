@@ -189,20 +189,20 @@ void display::ground(float rotateangle,float translatex,float translatey,std::ve
     for (int i=0;i<uniq.size();i++)
     {
       if(i==0)
-      {
-        text(pos,475,"Net "+to_string(uniq[i]+1));
-        pos+=75;
-      }
+        {
+            text(pos,475,"Net "+to_string(uniq[i]+1));
+            pos+=75;
+        }
       else if(i==uniq.size()-1)
-      {
-        text(pos+5,475,"Net "+to_string(uniq[i]));
-        pos+=75;
-      }
+        {
+            text(pos+5,475,"Net "+to_string(uniq[i]));
+            pos+=75;
+        }
       else
         {
-          text(pos,475,"Net "+to_string(uniq[i]));
-        pos+=75;
-      }
+            text(pos,475,"Net "+to_string(uniq[i]));
+            pos+=75;
+        }
 
     }
     string part2 ="\n<path\nd=\"M 0.5,24.5 L 24.5,24.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4098\" />\n<path\nd=\"M 4.5,27.5 L 20.5,27.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4100\" />\n<path\nd=\"M 16.5,30.5 L 8.5,30.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4102\" />\n<path\nd=\"M 12.5,24.5 L 12.5,4.5\"\nstyle=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\nid=\"path4104\" />\n</g>\n</g>";

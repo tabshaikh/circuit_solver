@@ -15,7 +15,7 @@ closed_bracket  ")"
 
 {SPACE}*[RCLVI][a-zA-Z0-9]+                { yylval.str=strdup(yytext); return TYPE; }
                                 
-([0-9]+(.[0-9]+)?){SPACE}+         { yylval.str=strdup(yytext); printf((yylval.str)); return NUM; }
+([0-9]+(\.[0-9]+)?){SPACE}+         { yylval.str=strdup(yytext); return NUM; }
 
 
 {SPACE}+(NET[0-9]+|0)                               { yylval.str=strdup(yytext); return NODE; }
@@ -25,9 +25,9 @@ closed_bracket  ")"
                                 
 {SPACE}+(SINE)                                      { return SINE; }
 
-(([0-9]+.[0-9]+)|[0-9]+)(Khz){SPACE}+               { yylval.str=strdup(yytext); return FREQ; }
+(([0-9]+\.[0-9]+)|[0-9]+)(Khz){SPACE}+               { yylval.str=strdup(yytext); return FREQ; }
 
-(([0-9]+.[0-9]+)|[0-9]+)(S){SPACE}+                 { yylval.str=strdup(yytext); return DELAY; }
+(([0-9]+\.[0-9]+)|[0-9]+)(S){SPACE}+                 { yylval.str=strdup(yytext); return DELAY; }
 
                                                                                                                                                                                                                        
 [\n]                                               { return *yytext; }

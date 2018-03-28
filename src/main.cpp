@@ -11,6 +11,7 @@ vector <float> netposy;//y coordinates of nets
 float offset=50;//offset of 50units
 int base=0,top=0;
 int flag=1;
+char *inputfile;
 
 //------------------------------------------------------------------------------------------------------
 template<typename T, typename M, template<typename> class C = std::less>
@@ -134,8 +135,10 @@ void display_circuit()
     }
 }
 
-int main()
-{  
+int main(int argc, char * argv[])
+{
+    inputfile = argv[1]; 
+ 
     if(parser()!=-1)
     {    
         special_sort();

@@ -146,6 +146,13 @@ int main(int argc, char * argv[])
         float startpos=150;
         for(int i=0;i<uniq.size();i++)
         {
+            cout<<uniq[i];
+            cout<<endl;
+        }
+        uniq[1]=1;
+        uniq[2]=2;
+        for(int i=0;i<uniq.size();i++)
+        {
             netposx.push_back(startpos);
             netposy.push_back(450);
             startpos+=50;

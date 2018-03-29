@@ -1,7 +1,8 @@
 #Write your contents in the top.cir
 - Execute the code
-- Type the command -->  make
+- Type the command --> **make clean** to clean previos output
+- Type the command -->  **make execute input=top.cir**
 
-#To run it manually
-- ./a.out -->to prepare the vg image file
-- Open Circuit.html in the browser to see the svg image generated
+#To run the test cases
+- Type the command --> **make clean** to clean previos output
+- Type the command -->  **make debug**

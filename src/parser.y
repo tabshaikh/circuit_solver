@@ -7,6 +7,7 @@
     #include <string.h>
     #include <vector>
     #include <algorithm>
+    #include <unistd.h>
     #include "y.tab.h"
     #include "component.h"
     using namespace std;
@@ -105,13 +106,13 @@ comp:       TYPE NODE NODE UNIT
                             }
                             else
                             {
-                                unit[imag]=units[i];
+                                unit[iunit]=units[i];
                                 iunit++;
                             }
                             i++;
                         }
                         mag[imag]=NULL;
-                        unit[iunit]=NULL;
+                        unit[iunit]=NULL;                        
                     }
                     component temp;
                     temp.type = type[0];
@@ -120,8 +121,7 @@ comp:       TYPE NODE NODE UNIT
                     temp.end = atoi(start)>atoi(end)? atoi(start):atoi(end);
                     temp.magnitude = atoi(mag);
                     temp.unit = string(unit);
-                    components.push_back(temp);               
-
+                    components.push_back(temp);
                 }
             }
             ;
@@ -266,15 +266,24 @@ void node()
         {
             uniq.push_back(components[i].end);
         }
+        cout<<" ";
     }
     sort (uniq.begin(), uniq.begin()+4);
 }
 
-void printvector()
+void printvector1()
 {
     for(int i=0;i<components.size();i++)
     {
-        cout<<components[i].start<<"  "<<components[i].end<<endl;
+        cout<<components[i].magnitude<<"  "<<components[i].unit<<endl;
+    }
+}
+
+void printvector2()
+{
+    for(int i=0;i<uniq.size();i++)
+    {
+        cout<<uniq[i]<<endl;
     }
 }
 
@@ -291,5 +300,6 @@ int parser(void) {
         yyparse();
     }while (!feof(yyin));
     node();
+    // printvector2();
     return error;
 }

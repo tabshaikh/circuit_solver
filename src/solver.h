@@ -1,4 +1,6 @@
-
+#include <complex>
+#include <iostream>
+using namespace std;
 extern void solver();
 struct answer
 {
@@ -8,4 +10,6 @@ struct answer
     double current;
     double voltage_phase;
     double current_phase;
+    complex<double> net_voltage;
+    complex<double> net_current;
 };

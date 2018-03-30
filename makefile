@@ -12,4 +12,4 @@ debug:
 	./test.sh
 
 clean:
-	rm ./a.out ./output.svg
+	rm ./a.out ./output.svg ./result.txt

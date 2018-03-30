@@ -1,6 +1,7 @@
 #include "display.h"
 #include "component.h"
 #include "y.tab.h"
+#include "solver.h"
 using namespace std;
 
 display d;      //Creating object d of display class
@@ -64,6 +65,16 @@ void write_component(float netpositionx,float netpositiony)
     }
 }
 
+void arrange()
+{
+    for(int i=0; i < components.size(); i++)
+    {
+        int start=components[i].start;
+        int end=components[i].end;
+        components[i].start = (start)<(end)? (start):(end);
+        components[i].end = (start)>(end)? (start):(end);
+    }
+}
 void special_sort()
 {
     std::sort(components.begin(), components.end(), make_member_comparer(&component::start));
@@ -138,10 +149,8 @@ void display_circuit()
 int main(int argc, char * argv[])
 {
     inputfile = argv[1]; 
- 
     if(parser()!=-1)
-    {    
-        special_sort();
+    {        
         //intializing the coordinates of each netname
         float startpos=150;
         for(int i=0;i<uniq.size();i++)
@@ -152,6 +161,9 @@ int main(int argc, char * argv[])
         }
         //making ground point 
         d.ground(0,netposx[0],netposy[0]-1,uniq);
+        solver();
+        arrange();
+        special_sort();
         display_circuit();
     }
     return 0;

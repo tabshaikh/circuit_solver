@@ -18,6 +18,9 @@
     extern "C" FILE *yyin;
     vector <component> components;
     vector <int> uniq;
+    vector <source> voltage;
+    vector <source> current;
+
     int error=0;
 %}
 %union{
@@ -40,15 +43,15 @@ comp:       TYPE NODE NODE UNIT
                 char *type = trim($1);
                 char *unit = trim($4);
                 int unitLength = strlen(unit);
-                if(type[0]=='R' && unit[unitLength-1]!='K')
+                if(type[0]=='R' && unit[unitLength-3]!='o'&& unit[unitLength-2]!='h'&& unit[unitLength-1]!='m')
                 {
                     yyerror("Register Units are Wrong");
                 }
-                else if(type[0]=='C' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M'||unit[unitLength-2]!='K'||unit[unitLength-2]!='P')&& unit[unitLength-1]!='F')
+                else if(type[0]=='C' && unit[unitLength-1]!='F')
                 {
                     yyerror("Capacitor Units are Wrong");
                 }
-                else if(type[0]=='L' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M'||unit[unitLength-2]!='K'||unit[unitLength-2]!='P')&& unit[unitLength-1]!='H')
+                else if(type[0]=='L' && unit[unitLength-1]!='H')
                 {
                     yyerror("Inductor Units are Wrong");
                 }
@@ -99,7 +102,7 @@ comp:       TYPE NODE NODE UNIT
                         int imag=0,iunit=0,i=0;
                         while(i!=len)
                         {
-                            if(isdigit(units[i]))
+                            if(isdigit(units[i])||units[i]=='.')
                             {
                                 mag[imag]=units[i];
                                 imag++;
@@ -117,9 +120,9 @@ comp:       TYPE NODE NODE UNIT
                     component temp;
                     temp.type = type[0];
                     temp.name = string((type+1));
-                    temp.start = atoi(start)<atoi(end)? atoi(start):atoi(end);
-                    temp.end = atoi(start)>atoi(end)? atoi(start):atoi(end);
-                    temp.magnitude = atoi(mag);
+                    temp.start = atoi(start);
+                    temp.end = atoi(end);
+                    temp.magnitude = atof(mag);
                     temp.unit = string(unit);
                     components.push_back(temp);
                 }
@@ -173,8 +176,8 @@ source:     TYPE NODE NODE SINE OPENBRACKET NUM NUM FREQ DELAY NUM CLOSEBRACKET
                     component temp;
                     temp.type=type[0];
                     temp.name = string((type+1));
-                    temp.start = atoi(start)<atoi(end)? atoi(start):atoi(end);
-                    temp.end = atoi(start)>atoi(end)? atoi(start):atoi(end);
+                    temp.start = atoi(start);
+                    temp.end = atoi(end);
                     temp.dcoffset = atof($6);
                     temp.amplitude = atof($7);
                     char *frequency1 = trim($8);
@@ -215,6 +218,24 @@ source:     TYPE NODE NODE SINE OPENBRACKET NUM NUM FREQ DELAY NUM CLOSEBRACKET
                     temp.delay = atof(delay2);
                     temp.dampingfactor=atof($10);
                     components.push_back(temp);
+
+                    source temp1;
+                    temp1.name = atoi((type+1));
+                    temp1.start = atoi(start);
+                    temp1.end = atoi(end);
+                    temp1.dcoffset = atof($6);
+                    temp1.amplitude = atof($7);
+                    temp1.f = atof(frequency2);
+                    temp1.delay = atof(delay2);
+                    temp1.dampingfactor=atof($10);
+                    if(type[0]=='V')
+                    {
+                        voltage.push_back(temp1);
+                    }
+                    else
+                    {
+                        current.push_back(temp1);
+                    }
                 }
             }
             ;
@@ -245,6 +266,7 @@ void yyerror(char *s) {
     extern int yylineno;
     fprintf(stderr, "Line Number%d:-%s\n",yylineno, s);
 }
+
 int find(int s)
 {
     for(int i=0;i<uniq.size();i++){
@@ -254,6 +276,12 @@ int find(int s)
     }
     return -1;
 }
+
+bool sort_by_name( const source & lhs, const source & rhs )
+{
+   return lhs.name < rhs.name;
+}
+
 void node()
 {
     for(int i=0; i<components.size(); i++)
@@ -268,7 +296,8 @@ void node()
         }
         cout<<" ";
     }
-    sort (uniq.begin(), uniq.begin()+4);
+    sort (uniq.begin(), uniq.end());
+    sort( voltage.begin(), voltage.end(), sort_by_name );
 }
 
 void printvector1()

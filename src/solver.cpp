@@ -1,0 +1,254 @@
+#define ARMA_DONT_USE_WRAPPER
+#define ARMA_USE_LAPACK
+#include <iostream>
+#include <armadillo>
+#include <complex>
+#include "component.h"
+#include "solver.h"
+
+using namespace std;
+using namespace arma;
+
+extern vector <int> uniq;             //data in form of a structure
+extern vector <source> voltage;       //data in form of a structure
+extern vector <source> current;       //data in form of a structure
+extern vector <component> components; //data in form of a structure
+vector <answer> result;
+
+int n, m;
+
+cx_mat A;
+Mat<double> z;
+cx_mat x;
+
+
+double value(int val, char ch)
+{
+    if (ch == 'K')
+    {
+        return val * 1000;
+    }
+    else if (ch == 'M')
+    {
+        return val / 1000.0;
+    }
+    else if (ch == 'N')
+    {
+        return val / 1000000000.0;
+    }
+    else if (ch == 'P')
+    {
+        return val / 1000000000.0;
+    }
+    else if (ch == 'U')
+    {
+        return val / 1000000.0;
+    }
+    else
+    {
+        return val ;
+    }
+}
+
+void makeBC()
+{
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (voltage[i].start == uniq[j+1])
+            {
+                A(j, n + i) = complex<double>(1, 0);
+                A(n + i, j) = complex<double>(1, 0);
+            }
+            else if (voltage[i].end == uniq[j+1])
+            {
+                A(j, n + i) = complex<double>(-1, 0);
+                A(n + i, j) = complex<double>(-1, 0);
+            }
+            else
+            {
+                A(j, n + i) = complex<double>(0, 0);
+                A(n + i, j) = complex<double>(0, 0);
+            }
+        }
+    }
+}
+
+void makez()
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < current.size(); j++)
+        {
+            if (current[j].start == uniq[i+1])
+            {
+                z(i, 0) = current[j].amplitude;
+            }
+            else if (current[j].end == uniq[i+1])
+            {
+                z(i, 0) = -1 * current[j].amplitude;
+            }
+        }
+    }
+    for (int i = 0; i < m; i++)
+    {
+        z(i + n, 0) = voltage[i].amplitude;
+    }
+}
+
+int findagain(int s)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (uniq[i+1] == s)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int findvoltage(int s)
+{
+    for (int i = 0; i < m; i++)
+    {
+        if (voltage[i].name == s)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// int findcurrent(int s)
+// {
+//     for (int i = 0; i < current.size(); i++)
+//     {
+//         if (current[i].name == s)
+//         {
+//             return i;
+//         }
+//     }
+//     return -1;
+// }
+
+complex<double> impedence(char c, int magnitude, char unit)
+{
+    double w = 2 * 3.14 * voltage[0].f * 1000;
+    if (c == 'R')
+    {
+        return complex<double>(1.0 / value(magnitude, unit), 0);
+    }
+    else if (c == 'L')
+    {
+        return complex<double>(0, -1.0 / (value(magnitude, unit) * w));
+    }
+    else if (c == 'C')
+    {
+        return complex<double>(0, (value(magnitude, unit) * w));
+    }
+}
+
+void makeG()
+{
+    for (int i = 0; i < components.size(); i++)
+    {
+        if (components[i].type != 'V' && components[i].type != 'I')
+        {
+            if (components[i].start != -1 && components[i].end != -1)
+            {
+                int j1 = findagain(components[i].start);
+                int j2 = findagain(components[i].end);
+                A(j1, j1) += impedence(components[i].type, components[i].magnitude, components[i].unit[0]);
+                A(j2, j2) += impedence(components[i].type, components[i].magnitude, components[i].unit[0]);
+                A(j1, j2) -= impedence(components[i].type, components[i].magnitude, components[i].unit[0]);
+                A(j2, j1) -= impedence(components[i].type, components[i].magnitude, components[i].unit[0]);
+            }
+            else if (components[i].start != -1 || components[i].end != -1)
+            {
+                int j1 = findagain(components[i].start);
+                int j2 = findagain(components[i].end);
+                if (j2 != -1)
+                {
+                    A(j2, j2) += impedence(components[i].type, components[i].magnitude, components[i].unit[0]);
+                }
+                else if (j1 != -1)
+                {
+                    A(j1, j1) += impedence(components[i].type, components[i].magnitude, components[i].unit[0]);
+                }
+            }
+        }
+    }
+}
+
+void solver()
+{
+    n = uniq.size()-1;    //  number of nodes
+    m = voltage.size(); //  number of voltages sources
+
+    A = zeros<cx_mat>(n + m, n + m);
+    z = mat(n + m, 1, fill::zeros);
+    x = zeros<cx_mat>(n+m, 1);
+
+    makez();    //  Prepare the Z-Matrix
+    makeBC();   //  Prepare the B, C and D Matrix
+    makeG();    //  Prepare the G Matrix
+
+    cout<<A<<endl;
+    cx_mat Z = cx_mat(z,zeros(n + m,1));
+    cout<<Z<<endl;
+    x = solve(A, Z);
+    for(int i=n;i<n+m;i++)
+    {
+        x(i,0)=-1.0*x(i,0);
+    }
+    cout<<x<<endl;
+    for( int i=0; i<components.size(); i++)
+    {
+        answer temp;
+        temp.type=components[i].type;
+        temp.name=stoi(components[i].name);
+        if(components[i].type=='V')
+        {
+            temp.voltage=components[i].amplitude;
+            temp.voltage_phase=components[i].delay;
+            temp.current=abs(x(findvoltage(temp.name)+n,0));
+            temp.current_phase=arg(x(findvoltage(temp.name)+n,0));
+        }
+        else
+        {
+            complex<double> voltage_difference;
+            if(components[i].start!=-1 && components[i].end!=-1)
+            {
+                voltage_difference=x(findagain(components[i].start),0)-x(findagain(components[i].end),0);
+            }
+            else
+            {
+                if(components[i].end!=-1)
+                {
+                    voltage_difference=-x(findagain(components[i].end),0);
+                }
+                else if(components[i].start!=-1)
+                {
+                    voltage_difference=(x(findagain(components[i].start),0));                    
+                }                
+            }
+
+            temp.voltage=abs(voltage_difference);
+            temp.voltage_phase=arg(voltage_difference);
+
+            if(components[i].type=='I')
+            {
+                temp.current=components[i].amplitude;
+                temp.current_phase=components[i].delay;                                        
+            }
+            else
+            {
+                temp.current=abs(voltage_difference/impedence(components[i].type, components[i].magnitude, components[i].unit[0]));
+                temp.current_phase=arg(voltage_difference/impedence(components[i].type, components[i].magnitude, components[i].unit[0]));                                        
+            }
+        }
+        result.push_back(temp);
+    }
+}

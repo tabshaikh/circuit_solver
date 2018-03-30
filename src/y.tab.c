@@ -72,6 +72,7 @@
     #include <string.h>
     #include <vector>
     #include <algorithm>
+    #include <unistd.h>
     #include "y.tab.h"
     #include "component.h"
     using namespace std;
@@ -82,9 +83,12 @@
     extern "C" FILE *yyin;
     vector <component> components;
     vector <int> uniq;
+    vector <source> voltage;
+    vector <source> current;
+
     int error=0;
 
-#line 88 "y.tab.c" /* yacc.c:339  */
+#line 92 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -148,11 +152,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 22 "parser.y" /* yacc.c:355  */
+#line 26 "parser.y" /* yacc.c:355  */
 
     char * str;
 
-#line 156 "y.tab.c" /* yacc.c:355  */
+#line 160 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -169,7 +173,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 173 "y.tab.c" /* yacc.c:358  */
+#line 177 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -467,8 +471,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    28,    28,    29,    30,    31,    32,    34,    35,    37,
-     128
+       0,    32,    32,    33,    34,    35,    36,    38,    39,    41,
+     131
 };
 #endif
 
@@ -1246,20 +1250,20 @@ yyreduce:
   switch (yyn)
     {
         case 9:
-#line 38 "parser.y" /* yacc.c:1646  */
+#line 42 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-3].str));
                 char *unit = trim((yyvsp[0].str));
                 int unitLength = strlen(unit);
-                if(type[0]=='R' && unit[unitLength-1]!='K')
+                if(type[0]=='R' && unit[unitLength-3]!='o'&& unit[unitLength-2]!='h'&& unit[unitLength-1]!='m')
                 {
                     yyerror("Register Units are Wrong");
                 }
-                else if(type[0]=='C' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M'||unit[unitLength-2]!='K'||unit[unitLength-2]!='P')&& unit[unitLength-1]!='F')
+                else if(type[0]=='C' && unit[unitLength-1]!='F')
                 {
                     yyerror("Capacitor Units are Wrong");
                 }
-                else if(type[0]=='L' && (unit[unitLength-2]!='N'||unit[unitLength-2]!='M'||unit[unitLength-2]!='K'||unit[unitLength-2]!='P')&& unit[unitLength-1]!='H')
+                else if(type[0]=='L' && unit[unitLength-1]!='H')
                 {
                     yyerror("Inductor Units are Wrong");
                 }
@@ -1310,37 +1314,36 @@ yyreduce:
                         int imag=0,iunit=0,i=0;
                         while(i!=len)
                         {
-                            if(isdigit(units[i]))
+                            if(isdigit(units[i])||units[i]=='.')
                             {
                                 mag[imag]=units[i];
                                 imag++;
                             }
                             else
                             {
-                                unit[imag]=units[i];
+                                unit[iunit]=units[i];
                                 iunit++;
                             }
                             i++;
                         }
                         mag[imag]=NULL;
-                        unit[iunit]=NULL;
+                        unit[iunit]=NULL;                        
                     }
                     component temp;
                     temp.type = type[0];
                     temp.name = string((type+1));
-                    temp.start = atoi(start)<atoi(end)? atoi(start):atoi(end);
-                    temp.end = atoi(start)>atoi(end)? atoi(start):atoi(end);
-                    temp.magnitude = atoi(mag);
+                    temp.start = atoi(start);
+                    temp.end = atoi(end);
+                    temp.magnitude = atof(mag);
                     temp.unit = string(unit);
-                    components.push_back(temp);               
-
+                    components.push_back(temp);
                 }
             }
-#line 1340 "y.tab.c" /* yacc.c:1646  */
+#line 1343 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 129 "parser.y" /* yacc.c:1646  */
+#line 132 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-10].str));
                 if(type[0]!='V' && type[0]!='I')
@@ -1388,8 +1391,8 @@ yyreduce:
                     component temp;
                     temp.type=type[0];
                     temp.name = string((type+1));
-                    temp.start = atoi(start)<atoi(end)? atoi(start):atoi(end);
-                    temp.end = atoi(start)>atoi(end)? atoi(start):atoi(end);
+                    temp.start = atoi(start);
+                    temp.end = atoi(end);
                     temp.dcoffset = atof((yyvsp[-5].str));
                     temp.amplitude = atof((yyvsp[-4].str));
                     char *frequency1 = trim((yyvsp[-3].str));
@@ -1430,13 +1433,31 @@ yyreduce:
                     temp.delay = atof(delay2);
                     temp.dampingfactor=atof((yyvsp[-1].str));
                     components.push_back(temp);
+
+                    source temp1;
+                    temp1.name = atoi((type+1));
+                    temp1.start = atoi(start);
+                    temp1.end = atoi(end);
+                    temp1.dcoffset = atof((yyvsp[-5].str));
+                    temp1.amplitude = atof((yyvsp[-4].str));
+                    temp1.f = atof(frequency2);
+                    temp1.delay = atof(delay2);
+                    temp1.dampingfactor=atof((yyvsp[-1].str));
+                    if(type[0]=='V')
+                    {
+                        voltage.push_back(temp1);
+                    }
+                    else
+                    {
+                        current.push_back(temp1);
+                    }
                 }
             }
-#line 1436 "y.tab.c" /* yacc.c:1646  */
+#line 1457 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1440 "y.tab.c" /* yacc.c:1646  */
+#line 1461 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1664,7 +1685,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 221 "parser.y" /* yacc.c:1906  */
+#line 242 "parser.y" /* yacc.c:1906  */
 
 char* trim(char* input)
 {
@@ -1692,6 +1713,7 @@ void yyerror(char *s) {
     extern int yylineno;
     fprintf(stderr, "Line Number%d:-%s\n",yylineno, s);
 }
+
 int find(int s)
 {
     for(int i=0;i<uniq.size();i++){
@@ -1701,6 +1723,12 @@ int find(int s)
     }
     return -1;
 }
+
+bool sort_by_name( const source & lhs, const source & rhs )
+{
+   return lhs.name < rhs.name;
+}
+
 void node()
 {
     for(int i=0; i<components.size(); i++)
@@ -1713,15 +1741,25 @@ void node()
         {
             uniq.push_back(components[i].end);
         }
+        cout<<" ";
     }
-    sort (uniq.begin(), uniq.begin()+4);
+    sort (uniq.begin(), uniq.end());
+    sort( voltage.begin(), voltage.end(), sort_by_name );
 }
 
-void printvector()
+void printvector1()
 {
     for(int i=0;i<components.size();i++)
     {
-        cout<<components[i].start<<"  "<<components[i].end<<endl;
+        cout<<components[i].magnitude<<"  "<<components[i].unit<<endl;
+    }
+}
+
+void printvector2()
+{
+    for(int i=0;i<uniq.size();i++)
+    {
+        cout<<uniq[i]<<endl;
     }
 }
 
@@ -1738,5 +1776,6 @@ int parser(void) {
         yyparse();
     }while (!feof(yyin));
     node();
+    // printvector2();
     return error;
 }

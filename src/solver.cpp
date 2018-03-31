@@ -1,3 +1,4 @@
+//  libraries for armadillo
 #define ARMA_DONT_USE_WRAPPER
 #define ARMA_USE_LAPACK
 #include <iostream>
@@ -12,10 +13,10 @@
 using namespace std;
 using namespace arma;
 
-extern vector <int> uniq;             //data in form of a structure
-extern vector <source> voltage;       //data in form of a structure
-extern vector <source> current;       //data in form of a structure
-extern vector <component> components; //data in form of a structure
+extern vector <int> uniq;             //    structured data of node
+extern vector <source> voltage;       //structured data of voltages
+extern vector <source> current;       //structured data of current
+extern vector <component> components; //structured data of all the components
 vector <answer> result_temp;
 vector <answer> result_final;
 
@@ -26,25 +27,25 @@ Mat<double> z;
 cx_mat x;
 
 
-double value(int val, char ch)
+double value(double val, char ch)
 {
-    if (ch == 'K')
+    if (ch == 'K'||ch == 'k')
     {
-        return val * 1000;
+        return val * 1000.0;
     }
-    else if (ch == 'M')
+    else if (ch == 'M'||ch == 'm')
     {
         return val / 1000.0;
     }
-    else if (ch == 'N')
+    else if (ch == 'N'||ch == 'n')
     {
         return val / 1000000000.0;
     }
-    else if (ch == 'P')
+    else if (ch == 'P'||ch == 'p')
     {
         return val / 1000000000.0;
     }
-    else if (ch == 'U')
+    else if (ch == 'U'||ch == 'u')
     {
         return val / 1000000.0;
     }
@@ -125,9 +126,9 @@ int findvoltage(int s)
     return -1;
 }
 
-complex<double> impedence(char c, int magnitude, char unit, double f)
+complex<double> impedence(char c, double magnitude, char unit, double f)
 {
-    double w = 2 * 3.14 * f * 1000;
+    double w = 2 * 3.14 * f;
     if (c == 'R')
     {
         return complex<double>(1.0 / value(magnitude, unit), 0);
@@ -174,12 +175,16 @@ void makeG(double f)
     }
 }
 
-void filewrite(double f)
+void filewrite(double f, char ch)
 {
+    if(ch=='h')
+    {
+        ch=NULL;
+    }
     ofstream solverfile;
     solverfile.open("result.txt",ofstream::app);
     string voltages="",currents="";
-    voltages+="FREQ = "+to_string(f)+"Khz\nVOLTAGES\n";
+    voltages+="FREQ = "+to_string(f)+ch+"hz\nVOLTAGES\n";
     for(int i=0;i<result_temp.size();i++)
     {
         voltages+=result_temp[i].type+to_string(result_temp[i].name)+" "+to_string(round(result_temp[i].voltage*1000.0)/1000.0)+" "+to_string(round(result_temp[i].voltage_phase*180*100.0/3.14)/100.0)+"\n";
@@ -191,7 +196,7 @@ void filewrite(double f)
     solverfile.close();
 }
 
-void calculate(double f)
+void calculate(double f,char ch)
 {
     cx_mat Z = cx_mat(z,zeros(n + m,1));
     x = solve(A, Z);
@@ -245,7 +250,7 @@ void calculate(double f)
             }
             else
             {
-                temp.net_current=temp.net_voltage*impedence(components[i].type, components[i].magnitude, components[i].unit[0],f);
+                temp.net_current=temp.net_voltage*impedence(components[i].type, components[i].magnitude, components[i].unit[0],value(f,ch));
                 temp.current=abs(temp.net_current);
                 temp.current_phase=arg(temp.net_current);                                        
             }
@@ -253,8 +258,13 @@ void calculate(double f)
         result_temp.push_back(temp);
         result_final[i].net_current+=temp.net_current;
         result_final[i].net_voltage+=temp.net_voltage;
+        result_final[i].voltage=abs(result_final[i].net_voltage);
+        result_final[i].voltage_phase=arg(result_final[i].net_voltage);
+        result_final[i].current=abs(result_final[i].net_current);
+        result_final[i].current_phase=arg(result_final[i].net_current);
+
     }
-    filewrite(f);
+    filewrite(f,ch);
 }
 void solver()
 {
@@ -276,18 +286,18 @@ void solver()
         
         result_final.push_back(temp);
     }
-    A = zeros<cx_mat>(n + m, n + m);
-    z = mat(n + m, 1, fill::zeros);
-    x = zeros<cx_mat>(n+m, 1);
-    makeBC();   //  Prepare the B, C and D Matrix
-
+    
     int l=current.size();
     for(int i=0;i<l+m;i++)
     {
+        A = zeros<cx_mat>(n + m, n + m);
+        x = zeros<cx_mat>(n+m, 1);
         z = mat(n + m, 1, fill::zeros);
+        makeBC();   //  Prepare the B, C and D Matrix
+
         if(i<l)
         {
-            makeG(current[i].f);
+            makeG(value(current[i].f,current[i].unit[0]));
             for (int t = 0; t < n; t++)
             {
                 if (current[i].start == uniq[t+1])
@@ -299,13 +309,13 @@ void solver()
                     z(t, 0) = -1 * current[i].amplitude;
                 }        
             }
-            calculate(current[i].f);
+            calculate(current[i].f,current[i].unit[0]);
         }
         else
         {
             makeG(voltage[i-l].f);
             z(i-l + n, 0) = voltage[i-l].amplitude;
-            calculate(voltage[i-l].f);
+            calculate(voltage[i-l].f,voltage[i-l].unit[0]);
         }
     }
 }

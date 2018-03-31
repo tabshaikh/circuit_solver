@@ -227,7 +227,7 @@ void display::ac_current(float rotateangle,float translatex,float translatey,str
     <text x="-80" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
   type+name+" SINE (";
     outfile<<voltage;    
-    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<"Khz "<<delay<<"S  "<<df<<")\n</text>\n</g>\n</g>";
+    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<unit<<" "<<delay<<"S  "<<df<<")\n</text>\n</g>\n</g>";
 }
 
 void display::ground(float rotateangle,float translatex,float translatey,std::vector<int> uniq)

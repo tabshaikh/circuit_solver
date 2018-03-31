@@ -9,17 +9,18 @@ extern vector <component> components; //data in form of a structure
 extern vector <int> uniq; //data in form of a structure
 vector <float> netposx;//x coordinates of nets
 vector <float> netposy;//y coordinates of nets
-float offset=50;//offset of 50units
-int base=0,top=0;
-int flag=1;
+float offset=50;    //offset of 50units
+int base=0,top=0;   
+int flag=1; //For up-down placement of the branches according to even-odd rule
 char *inputfile;
-extern vector <answer> result_final;
-int rcount=0,lcount=0,ccount=0,vcount=0,icount=0;
-ofstream outfile1;
-extern vector <source> voltage;       
-extern vector <source> current;       
+extern vector <answer> result_final; //This struct stores the results after calculation such as voltage and current across each component
+int rcount=0,lcount=0,ccount=0,vcount=0,icount=0; // To count the number of resistors,inductors,capacitors and power sources in an ac-ciruit 
+ofstream outfile1;  
+extern vector <source> voltage;//Struct to store data of voltage sources       
+extern vector <source> current;//Struct to store data of current sources       
 
 //------------------------------------------------------------------------------------------------------
+//This template is used to sort the struct using extended radix sort
 template<typename T, typename M, template<typename> class C = std::less>
 struct member_comparer : std::binary_function<T, T, bool>
 {
@@ -47,7 +48,7 @@ member_comparer<T, M, C> make_member_comparer2(M T::*p)
 }
 
 //----------------------------------------------------------------------------------------------
-
+//Searches for a specific voltage source among all voltage sources
 int search_voltage_source(int name)
 {
     for(int i=0;i<voltage.size();i++)
@@ -58,6 +59,7 @@ int search_voltage_source(int name)
         }
     }
 }
+//Searches for a specific current source among all current sources
 int search_current_source(int name)
 {
     for(int i=0;i<current.size();i++)
@@ -68,6 +70,7 @@ int search_current_source(int name)
         }
     }
 }
+//Searches for the result of a particular component
 int search_result(char type,int name)
 {
     for(int i=0;i<result_final.size();i++)
@@ -79,6 +82,8 @@ int search_result(char type,int name)
     }
 }
 
+/*n clicking the desired component this function makes the html file tailoured specific to the component and 
+then links it with the component*/
 void onclick(string image_name,double v1,double v2,double i1,double i2)
 {
 
@@ -89,9 +94,10 @@ void onclick(string image_name,double v1,double v2,double i1,double i2)
             <img src=")foo"+image_name+R"foo(" width="500" height="300">
             <h3>V = )foo";
     outfile1<<data;
-    outfile1<<v1<<" /_"<<v2<<"</h3>\n<h3>I = "<<i1<<" /_"<<i2<<"</h3>\n</center>\n</body>\n</html>";
+    outfile1<<v1<<" /_"<<(v2*180)/3.141<<"</h3>\n<h3>I = "<<i1<<" /_"<<(i2*180)/3.141<<"</h3>\n</center>\n</body>\n</html>";
 }
 
+/*Writes the component in output.svg file*/
 void write_component(float netpositionx,float netpositiony)
 {   string fname="";
     int va=-1;
@@ -155,6 +161,7 @@ void write_component(float netpositionx,float netpositiony)
     }
 }
 
+//To arrange the components in a specific order ie. making the start net value of the component always less than the end net value
 void arrange()
 {
     for(int i=0; i < components.size(); i++)
@@ -165,6 +172,8 @@ void arrange()
         components[i].end = (start)>(end)? (start):(end);
     }
 }
+
+//Function used to call radix sort
 void special_sort()
 {
     std::sort(components.begin(), components.end(), make_member_comparer(&component::start));
@@ -182,6 +191,7 @@ void special_sort()
     }
 }
 
+//This searches the unique vector to find the array position of a given net name
 int searchnet(int n)
 {
     for(int i=0;i<uniq.size();i++)
@@ -192,6 +202,7 @@ int searchnet(int n)
     return -1;
 }
 
+//Used to call write_component function and draws wires connecting the components together
 void draw(int diff)
 {   
     int startindex=searchnet(components[top].start);
@@ -214,6 +225,7 @@ void draw(int diff)
     }
 }
 
+//To sort the structure of the circuit according to the even odd method 
 void display_circuit()
 {  
     while(base<components.size())
@@ -236,6 +248,7 @@ void display_circuit()
     }
 }
 
+//Main function 
 int main(int argc, char * argv[])
 {
     inputfile = argv[1]; 

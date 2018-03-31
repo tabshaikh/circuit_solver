@@ -1,0 +1,8 @@
+Point to remember:
+Not case sensitive.
+=========Rules for naming===================
+1.changed the resistor unit to ohm
+--------------------------------------------
+superposition principle applied
+
+

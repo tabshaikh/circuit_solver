@@ -64,6 +64,7 @@
 /* Copy the first part of user declarations.  */
 #line 1 "parser.y" /* yacc.c:339  */
 
+    /************************Header Files**************************/
     #include <stdio.h>
     #include <string.h>
     #include <ctype.h>
@@ -88,7 +89,7 @@
 
     int error=0;
 
-#line 92 "y.tab.c" /* yacc.c:339  */
+#line 93 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -152,11 +153,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 26 "parser.y" /* yacc.c:355  */
+#line 27 "parser.y" /* yacc.c:355  */
 
     char * str;
 
-#line 160 "y.tab.c" /* yacc.c:355  */
+#line 161 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -173,7 +174,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 177 "y.tab.c" /* yacc.c:358  */
+#line 178 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -471,8 +472,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    32,    32,    33,    34,    35,    36,    38,    39,    41,
-     131
+       0,    33,    33,    34,    35,    36,    37,    39,    40,    42,
+     132
 };
 #endif
 
@@ -1250,7 +1251,7 @@ yyreduce:
   switch (yyn)
     {
         case 9:
-#line 42 "parser.y" /* yacc.c:1646  */
+#line 43 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-3].str));
                 char *unit = trim((yyvsp[0].str));
@@ -1339,11 +1340,11 @@ yyreduce:
                     components.push_back(temp);
                 }
             }
-#line 1343 "y.tab.c" /* yacc.c:1646  */
+#line 1344 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 132 "parser.y" /* yacc.c:1646  */
+#line 133 "parser.y" /* yacc.c:1646  */
     {
                 char *type = trim((yyvsp[-10].str));
                 if(type[0]!='V' && type[0]!='I')
@@ -1463,11 +1464,11 @@ yyreduce:
                     }
                 }
             }
-#line 1467 "y.tab.c" /* yacc.c:1646  */
+#line 1468 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1471 "y.tab.c" /* yacc.c:1646  */
+#line 1472 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1695,8 +1696,9 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 252 "parser.y" /* yacc.c:1906  */
+#line 253 "parser.y" /* yacc.c:1906  */
 
+// Function to trim the tokens
 char* trim(char* input)
 {
     char* output = input;
@@ -1718,12 +1720,13 @@ char* trim(char* input)
     output[j]=NULL;
     return output;	
 }
+// Function to throw error
 void yyerror(char *s) {
     error=-1;
     extern int yylineno;
     fprintf(stderr, "Line Number%d:-%s\n",yylineno, s);
 }
-
+// Function to find unique element in the vector uniq
 int find(int s)
 {
     for(int i=0;i<uniq.size();i++){
@@ -1733,7 +1736,7 @@ int find(int s)
     }
     return -1;
 }
-
+// Function responsible to sort the structure on the basis of name
 bool sort_by_name( const source & lhs, const source & rhs )
 {
    return lhs.name < rhs.name;
@@ -1756,7 +1759,7 @@ void node()
     sort (uniq.begin(), uniq.end());
     sort( voltage.begin(), voltage.end(), sort_by_name );
 }
-
+// Function to print the component vector used for testing
 void printvector1()
 {
     for(int i=0;i<components.size();i++)
@@ -1764,7 +1767,7 @@ void printvector1()
         cout<<components[i].magnitude<<"  "<<components[i].unit<<endl;
     }
 }
-
+// Function to print the uniq vector
 void printvector2()
 {
     for(int i=0;i<uniq.size();i++)
@@ -1772,7 +1775,7 @@ void printvector2()
         cout<<uniq[i]<<endl;
     }
 }
-
+// Main function of the parser ->Reads the file and parser it.
 int parser(void) {
    FILE *pt = fopen(inputfile, "r" );
     if(!pt)

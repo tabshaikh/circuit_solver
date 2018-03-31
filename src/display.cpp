@@ -1,5 +1,6 @@
 #include "display.h"
 
+//Constructor used to open the file name output.svg and write the header and compulsory data present in every svg
 display::display()
 {
     string start=R"foo(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -10,12 +11,14 @@ display::display()
     outfile<<start;
 }
 
+//Destructor used to close the output.svg file and put the ending tags
 display::~display()
 {
     string end="\n</g>\n</svg>";
     outfile<<end;
 }
 
+//Function that writes the resistor in output.svg file
 void display::resistor(float rotateangle,float transformx,float transformy,string type,string name,float magnitude,string unit,string fname)
 {
     string resistor="\n<a xlink:href=\""+fname+"\" target=\"_blank\" >\n<g\nid=\"g4169\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(transformx)+","+to_string(transformy)+")\"\n label=\"Resistor\">\n"+"<g transform=\"translate("+to_string(transformx)+","+to_string(transformy)+")\">\n<g\nid=\"g4171\">\n<path\nid=\"path4173\"\n label=\"none\"\nstyle=\"fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none\"\nd=\"m 0,0 h 15.5 l 2,3 3,-6 3,6 3,-6 3,6 3,-6 2,3 H 50\"\n connector-curvature=\"0\" />"+"\n<text x=\"20\" y=\"10\" font-size=\"3\" fill=\"black\" >"+type+name+"(";    
@@ -25,6 +28,7 @@ void display::resistor(float rotateangle,float transformx,float transformy,strin
     outfile<<remaining;
 }
 
+//Function that writes the inductor in output.svg file
 void display::inductor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit,string fname)
 {
     string inductor1 ="\n<a xlink:href=\""+fname+"\" target=\"_blank\">\n <g \n  label=\"Inductor\" \n transform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+
@@ -109,6 +113,7 @@ void display::inductor(float rotateangle,float translatex,float translatey,strin
     outfile<<remaining;
 }
 
+//Function that writes the capacitor in output.svg file
 void display::capacitor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit,string fname)
 {
     string capacitor= "\n<a xlink:href=\""+fname+"\" target=\"_blank\">\n<g\n label=\"Capacitor\"\ntransform=\"rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+") translate("+to_string(translatex)+","+to_string(translatey)+")\""+R"foo(
@@ -149,6 +154,7 @@ void display::capacitor(float rotateangle,float translatex,float translatey,stri
     outfile<<remaining;
 }
 
+//Function that writes the voltage source in output.svg file
 void display::ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df,string fname,string unit,bool posdirection)
 {
     string voltage = "\n<g \n id=\"g4164\" \n transform=\"translate("+to_string(translatex)+","+to_string(translatey)+") rotate("+to_string(rotateangle)+",0,0)\">"
@@ -193,6 +199,7 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
     outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<unit<<" "<<delay<<"S  "<<df<<")\n</text></a>\n</g>\n</g>";
 }
 
+//Function that writes the current source in output.svg file
 void display::ac_current(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df,string fname,string unit,bool posdirection)
 {
     string voltage = "\n<g \n id=\"g4164\" \n transform=\"translate("+to_string(translatex)+","+to_string(translatey)+") rotate("+to_string(rotateangle)+",0,0)\">"
@@ -227,6 +234,7 @@ void display::ac_current(float rotateangle,float translatex,float translatey,str
     outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<unit<<" "<<delay<<"S  "<<df<<")\n</text></a>\n</g>\n</g>";
 }
 
+//Function that writes the ground terminal in output.svg file
 void display::ground(float rotateangle,float translatex,float translatey,std::vector<int> uniq)
 {
     string ground ="\n<g\nid=\"layer1\" transform=\"translate("+to_string(translatex)+","+to_string(translatey)+")rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+")scale(0.7)\">\n<g transform=\"translate(-12.5,-3)\">";
@@ -255,11 +263,14 @@ void display::ground(float rotateangle,float translatex,float translatey,std::ve
     outfile<<part2;
 }
 
+//Function used to draw a wire in svg 
 void display::wire(float x1,float y1,float x2,float y2)
 {
    string line="\n<line x1=\""+to_string(x1)+"\" y1=\""+to_string(y1)+"\" x2=\""+to_string(x2)+"\" y2=\""+to_string(y2)+"\" stroke-width=\"1\" stroke=\"black\"/>";
     outfile<<line;
 }
+
+//Function that writes text in output.svg file
 void display::text(float x1,float y1,string s)
 {
    string text="\n<text x=\""+to_string(x1)+"\" y1=\""+to_string(y1)+"\" font-size=\"5\" fill=\"black\">"+s+"</text>";

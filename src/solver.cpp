@@ -313,7 +313,7 @@ void solver()
         }
         else
         {
-            makeG(voltage[i-l].f);
+            makeG(value(voltage[i-l].f,voltage[i-l].unit[0]));
             z(i-l + n, 0) = voltage[i-l].amplitude;
             calculate(voltage[i-l].f,voltage[i-l].unit[0]);
         }

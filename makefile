@@ -13,5 +13,4 @@ debug:
 	./test.sh
 
 clean:
-	rm ./a.out ./output.svg ./result.txt
-	rm -r click
+	rm -r ./a.out ./output.svg ./result.txt ./click

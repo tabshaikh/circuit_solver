@@ -85,3 +85,9 @@ If you have access to root/administrator/superuser privileges
   ```
   where "my_directory" is an alternative directory for storing
   C++ headers and library files.
+
+## Caution
+1. Some errors are faced using chrome to open the Circuit.html as chrome browser shows only one frame at a time.(prefer only mozilla)
+2. If Mozilla Firefox failed to zoom the image, please do hard reset ( Ctrl + Shift + R ) or reload the frame.
+3. Please ensure that you have flash player extension enabled in Mozilla.
+4. Sometimes there can error in which thunbnail fails to work, just keep on trying hard reset for that.

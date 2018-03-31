@@ -1,4 +1,5 @@
 %{
+    /************************Header Files**************************/
     #include <stdio.h>
     #include <string.h>
     #include <ctype.h>
@@ -26,8 +27,8 @@
 %union{
     char * str;
 }
-%token <str> TYPE NAME NODE UNIT NUM FREQ DELAY
-%token  SINE OPENBRACKET CLOSEBRACKET
+%token <str> TYPE NAME NODE UNIT NUM FREQ DELAY         //  terminals for the parser
+%token  SINE OPENBRACKET CLOSEBRACKET                   //  terminals for the parser
 %%
 program:    program statement '\n' 
             | program statement
@@ -250,6 +251,7 @@ source:     TYPE NODE NODE SINE OPENBRACKET NUM NUM FREQ DELAY NUM CLOSEBRACKET
             }
             ;
 %%
+// Function to trim the tokens
 char* trim(char* input)
 {
     char* output = input;
@@ -271,12 +273,13 @@ char* trim(char* input)
     output[j]=NULL;
     return output;	
 }
+// Function to throw error
 void yyerror(char *s) {
     error=-1;
     extern int yylineno;
     fprintf(stderr, "Line Number%d:-%s\n",yylineno, s);
 }
-
+// Function to find unique element in the vector uniq
 int find(int s)
 {
     for(int i=0;i<uniq.size();i++){
@@ -286,7 +289,7 @@ int find(int s)
     }
     return -1;
 }
-
+// Function responsible to sort the structure on the basis of name
 bool sort_by_name( const source & lhs, const source & rhs )
 {
    return lhs.name < rhs.name;
@@ -309,7 +312,7 @@ void node()
     sort (uniq.begin(), uniq.end());
     sort( voltage.begin(), voltage.end(), sort_by_name );
 }
-
+// Function to print the component vector used for testing
 void printvector1()
 {
     for(int i=0;i<components.size();i++)
@@ -317,7 +320,7 @@ void printvector1()
         cout<<components[i].magnitude<<"  "<<components[i].unit<<endl;
     }
 }
-
+// Function to print the uniq vector
 void printvector2()
 {
     for(int i=0;i<uniq.size();i++)
@@ -325,7 +328,7 @@ void printvector2()
         cout<<uniq[i]<<endl;
     }
 }
-
+// Main function of the parser ->Reads the file and parser it.
 int parser(void) {
    FILE *pt = fopen(inputfile, "r" );
     if(!pt)

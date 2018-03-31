@@ -6,7 +6,7 @@
     void yyerror(char *);
 %}
 %option yylineno
-%option caseless
+%option caseless        
 
 SPACE           " "
 open_bracket    "("

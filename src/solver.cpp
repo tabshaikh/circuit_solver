@@ -14,11 +14,11 @@ using namespace std;
 using namespace arma;
 
 extern vector <int> uniq;             //    structured data of node
-extern vector <source> voltage;       //structured data of voltages
-extern vector <source> current;       //structured data of current
-extern vector <component> components; //structured data of all the components
-vector <answer> result_temp;
-vector <answer> result_final;
+extern vector <source> voltage;       //    structured data of voltages
+extern vector <source> current;       //    structured data of current
+extern vector <component> components; //    structured data of all the components
+vector <answer> result_temp;    // vector to store data of indivisual source
+vector <answer> result_final;   // vector to store data of overall circuit
 
 int n, m;
 
@@ -26,7 +26,7 @@ cx_mat A;
 Mat<double> z;
 cx_mat x;
 
-
+// Calculate the net magnitude based on unit
 double value(double val, char ch)
 {
     if (ch == 'K'||ch == 'k')
@@ -54,7 +54,7 @@ double value(double val, char ch)
         return val ;
     }
 }
-
+// Make vector B and C
 void makeBC()
 {
     for (int i = 0; i < m; i++)
@@ -101,7 +101,7 @@ void makeBC()
 //         z(i + n, 0) = voltage[i].amplitude;
 //     }
 // }
-
+// Used to search in the uniq vector
 int findagain(int s)
 {
     for (int i = 0; i < n; i++)
@@ -113,7 +113,7 @@ int findagain(int s)
     }
     return -1;
 }
-
+// Used to search the volatage structure
 int findvoltage(int s)
 {
     for (int i = 0; i < m; i++)
@@ -125,7 +125,7 @@ int findvoltage(int s)
     }
     return -1;
 }
-
+// Calculate the inverse of the impedence 
 complex<double> impedence(char c, double magnitude, char unit, double f)
 {
     double w = 2 * 3.14 * f;
@@ -142,7 +142,7 @@ complex<double> impedence(char c, double magnitude, char unit, double f)
         return complex<double>(0, (value(magnitude, unit) * w));
     }
 }
-
+// Used to make the G matrix
 void makeG(double f)
 {
     for (int i = 0; i < components.size(); i++)
@@ -174,7 +174,7 @@ void makeG(double f)
         }
     }
 }
-
+// Function responsible for writting result.txt
 void filewrite(double f, char ch)
 {
     if(ch=='h')
@@ -195,7 +195,7 @@ void filewrite(double f, char ch)
     solverfile << currents;
     solverfile.close();
 }
-
+// function calculating x for a single source
 void calculate(double f,char ch)
 {
     cx_mat Z = cx_mat(z,zeros(n + m,1));
@@ -266,6 +266,8 @@ void calculate(double f,char ch)
     }
     filewrite(f,ch);
 }
+
+// function applying superposition principle
 void solver()
 {
     remove("result.txt");

@@ -82,7 +82,7 @@ int search_result(char type,int name)
 void onclick(string image_name,double v1,double v2,double i1,double i2)
 {
 
-  string data=R"foo("<!DOCTYPE html>
+  string data=R"foo(<!DOCTYPE html>
     <html>
         <body>
         <center>

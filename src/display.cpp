@@ -149,7 +149,7 @@ void display::capacitor(float rotateangle,float translatex,float translatey,stri
     outfile<<remaining;
 }
 
-void display::ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df,string fname,bool posdirection)
+void display::ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df,string fname,string unit,bool posdirection)
 {
     string voltage = "\n<g \n id=\"g4164\" \n transform=\"translate("+to_string(translatex)+","+to_string(translatey)+") rotate("+to_string(rotateangle)+",0,0)\">"
     R"foo(
@@ -178,7 +178,6 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
   {
   string v1=R"foo(<text x="6" y="23" transform="rotate(90,8,23)" font-size="7" fill="black">-</text>
     <text x="8" y="-2" font-size="5" fill="black">+</text>
-    </a>
     <text x="-80" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
   type+name+" SINE (";
   outfile<<v1;
@@ -187,15 +186,14 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
   {
     string v1=R"foo(<text x="6" y="23" transform="rotate(90,8,23)" font-size="5" fill="black">+</text>
     <text x="8" y="-2" font-size="7" transform="translate(0,-2) rotate(90,8,-2)" fill="black">-</text>
-    </a>
     <text x="-80" y="-8" font-size="3"  fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
     type+name+" SINE (";
     outfile<<v1;
   }    
-    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<"Khz "<<delay<<"S  "<<df<<")\n</text>\n</g>\n</g>";
+    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<unit<<" "<<delay<<"S  "<<df<<")\n</text></a>\n</g>\n</g>";
 }
 
-void display::ac_current(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df,string fname,bool posdirection)
+void display::ac_current(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df,string fname,string unit,bool posdirection)
 {
     string voltage = "\n<g \n id=\"g4164\" \n transform=\"translate("+to_string(translatex)+","+to_string(translatey)+") rotate("+to_string(rotateangle)+",0,0)\">"
     R"foo(
@@ -223,11 +221,10 @@ void display::ac_current(float rotateangle,float translatex,float translatey,str
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
   <line x1="7.000000" y1="20.000000" x2="7.000000" y2="32.50000" stroke-width="1" stroke="black"/>
     <line x1="7.000000" y1="0.000000" x2="7.000000" y2="-19.000000" stroke-width="1" stroke="black"/>
-    </a>
     <text x="-80" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
   type+name+" SINE (";
     outfile<<voltage;    
-    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<" "<<delay<<"S  "<<df<<")\n</text>\n</g>\n</g>";
+    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<unit<<" "<<delay<<"S  "<<df<<")\n</text></a>\n</g>\n</g>";
 }
 
 void display::ground(float rotateangle,float translatex,float translatey,std::vector<int> uniq)

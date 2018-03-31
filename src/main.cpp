@@ -68,6 +68,16 @@ int search_current_source(int name)
         }
     }
 }
+int search_result(char type,int name)
+{
+    for(int i=0;i<result_final.size();i++)
+    {
+        if(name==result_final[i].name && type==result_final[i].type)
+        {
+            return i;
+        }
+    }
+}
 
 void onclick(string image_name,double v1,double v2,double i1,double i2)
 {
@@ -79,60 +89,66 @@ void onclick(string image_name,double v1,double v2,double i1,double i2)
             <img src=")foo"+image_name+R"foo(" width="500" height="300">
             <h3>V = )foo";
     outfile1<<data;
-    outfile1<<v1<<" "<<v2<<"</h3>\n<h3>I = "<<i1<<" "<<i2<<"</h3>\n</center>\n</body>\n</html>";
+    outfile1<<v1<<" /_"<<v2<<"</h3>\n<h3>I = "<<i1<<" /_"<<i2<<"</h3>\n</center>\n</body>\n</html>";
 }
 
 void write_component(float netpositionx,float netpositiony)
 {   string fname="";
     int va=-1;
-    int ia=-1;         
+    int ia=-1;
+    int respos=0;         
     switch(components[top].type)
     {
         case 'R':
-        fname="r"+to_string(rcount)+".html";
+        fname="./click/r"+to_string(rcount)+".html";
+        respos=search_result(components[top].type,stoi(components[top].name));
         d.resistor(0,netpositionx,netpositiony,"R",components[top].name,components[top].magnitude,components[top].unit,fname);
         outfile1.open(fname);
-        onclick("resistor.png",10,45,2,10);
+        onclick("../circuit_elements/resistor.png",result_final[respos].voltage,result_final[respos].voltage_phase,result_final[respos].current,result_final[respos].current_phase);
         outfile1.close();
         rcount++;
         break;
         case 'L':
-        fname="l"+to_string(lcount)+".html";
+        fname="./click/l"+to_string(lcount)+".html";
+        respos=search_result(components[top].type,stoi(components[top].name));
         d.inductor(0,netpositionx,netpositiony,"L",components[top].name,components[top].magnitude,components[top].unit,fname);
         outfile1.open(fname);
-        onclick("inductor.png",10,45,2,10);
+        onclick("../circuit_elements/inductor.png",result_final[respos].voltage,result_final[respos].voltage_phase,result_final[respos].current,result_final[respos].current_phase);
         outfile1.close();
         lcount++;
         break;
         case 'C':
-        fname="c"+to_string(ccount)+".html";
+        fname="./click/c"+to_string(ccount)+".html";
+        respos=search_result(components[top].type,stoi(components[top].name));
         d.capacitor(0,netpositionx,netpositiony,"C",components[top].name,components[top].magnitude,components[top].unit,fname);
-        outfile1.open(fname);
-        onclick("capacitor.png",10,45,2,10);
+        outfile1.open(fname);        
+        onclick("../circuit_elements/capacitor.png",result_final[respos].voltage,result_final[respos].voltage_phase,result_final[respos].current,result_final[respos].current_phase);
         outfile1.close();
         ccount++;
         break;
         case 'V':
-        fname="v"+to_string(vcount)+".html";
+        fname="./click/v"+to_string(vcount)+".html";
         va=search_voltage_source(stoi(components[top].name));
+        respos=search_result(components[top].type,stoi(components[top].name));
         if(voltage[va].start>voltage[va].end)
-        d.ac_source(90,netpositionx+25,netpositiony-7,"V",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,true);
+        d.ac_source(90,netpositionx+25,netpositiony-7,"V",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,components[top].unit,true);
         else
-        d.ac_source(90,netpositionx+25,netpositiony-7,"V",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,false);
+        d.ac_source(90,netpositionx+25,netpositiony-7,"V",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,components[top].unit,false);
         outfile1.open(fname);
-        onclick("voltage_source.png",10,45,2,10);
+        onclick("../circuit_elements/voltage_source.png",result_final[respos].voltage,result_final[respos].voltage_phase,result_final[respos].current,result_final[respos].current_phase);
         outfile1.close();
         vcount++;
         break;                                                                                                                                                                                      
         case 'I':
-        fname="i"+to_string(icount)+".html";
+        fname="./click/i"+to_string(icount)+".html";
         ia=search_current_source(stoi(components[top].name));
+        respos=search_result(components[top].type,stoi(components[top].name));
         if(current[ia].start>current[ia].end)
-        d.ac_current(90,netpositionx+25,netpositiony-7,"I",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,true);
+        d.ac_current(90,netpositionx+25,netpositiony-7,"I",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,components[top].unit,true);
         else
-        d.ac_current(90,netpositionx+25,netpositiony-7,"I",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,false);
+        d.ac_current(90,netpositionx+25,netpositiony-7,"I",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,components[top].unit,false);
         outfile1.open(fname);
-        onclick("current_source.png",10,45,2,10);
+        onclick("../circuit_elements/current_source.png",result_final[respos].voltage,result_final[respos].voltage_phase,result_final[respos].current,result_final[respos].current_phase);
         outfile1.close();
         icount++;
         break; 

@@ -1397,22 +1397,31 @@ yyreduce:
                     temp.amplitude = atof((yyvsp[-4].str));
                     char *frequency1 = trim((yyvsp[-3].str));
                     char *frequency2;
+                    char *unit;
                     {
                         int len = strlen(frequency1);
                         frequency2 = new char[len];
-                        int i1=0, i2=0;
-                        while( i1 != len )
+                        unit = new char[len];
+                        int i1=0, i2=0, i=0;
+                        while( i != len )
                         {
-                            if(isdigit(frequency1[i1])||frequency1[i1]=='.')
+                            if(isdigit(frequency1[i])||frequency1[i]=='.')
                             {
-                                frequency2[i2]=frequency1[i1];
+                                frequency2[i2]=frequency1[i];
                                 i2++;
                             }
-                            i1++;
+                            else
+                            {
+                                unit[i1]=frequency1[i];
+                                i1++;
+                            }
+                            i++;
                         }
                         frequency2[i2]=NULL;
+                        unit[i1]=NULL;
                     }
                     temp.f = atof(frequency2);
+                    temp.unit = string(unit);
                     char *delay1 = trim((yyvsp[-2].str));
                     char *delay2;
                     {
@@ -1441,6 +1450,7 @@ yyreduce:
                     temp1.dcoffset = atof((yyvsp[-5].str));
                     temp1.amplitude = atof((yyvsp[-4].str));
                     temp1.f = atof(frequency2);
+                    temp1.unit = string(unit);
                     temp1.delay = atof(delay2);
                     temp1.dampingfactor=atof((yyvsp[-1].str));
                     if(type[0]=='V')
@@ -1453,11 +1463,11 @@ yyreduce:
                     }
                 }
             }
-#line 1457 "y.tab.c" /* yacc.c:1646  */
+#line 1467 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1461 "y.tab.c" /* yacc.c:1646  */
+#line 1471 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1685,7 +1695,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 242 "parser.y" /* yacc.c:1906  */
+#line 252 "parser.y" /* yacc.c:1906  */
 
 char* trim(char* input)
 {

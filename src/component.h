@@ -24,7 +24,7 @@ struct source
     float f=0.0;
     float delay=0.0;
     float dampingfactor=0.0;
-
+    std::string unit="";
 };
 extern int parser();
 extern char *inputfile;

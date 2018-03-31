@@ -19,7 +19,7 @@ class display
         void resistor(float rotateangle,float transformx,float transformy,string type,string name,float magnitude,string unit);
         void inductor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit);
         void capacitor(float rotateangle,float translatex,float translatey,string type,string name,float magnitude,string unit);
-        void ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df);
+        void ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df,string unit);
         void ground(float rotateangle,float translatex,float translatey,std::vector<int> uniq);
         void wire(float x1,float y1,float x2,float y2);
         void text(float x1,float y1,string s);

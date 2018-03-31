@@ -182,22 +182,31 @@ source:     TYPE NODE NODE SINE OPENBRACKET NUM NUM FREQ DELAY NUM CLOSEBRACKET
                     temp.amplitude = atof($7);
                     char *frequency1 = trim($8);
                     char *frequency2;
+                    char *unit;
                     {
                         int len = strlen(frequency1);
                         frequency2 = new char[len];
-                        int i1=0, i2=0;
-                        while( i1 != len )
+                        unit = new char[len];
+                        int i1=0, i2=0, i=0;
+                        while( i != len )
                         {
-                            if(isdigit(frequency1[i1])||frequency1[i1]=='.')
+                            if(isdigit(frequency1[i])||frequency1[i]=='.')
                             {
-                                frequency2[i2]=frequency1[i1];
+                                frequency2[i2]=frequency1[i];
                                 i2++;
                             }
-                            i1++;
+                            else
+                            {
+                                unit[i1]=frequency1[i];
+                                i1++;
+                            }
+                            i++;
                         }
                         frequency2[i2]=NULL;
+                        unit[i1]=NULL;
                     }
                     temp.f = atof(frequency2);
+                    temp.unit = string(unit);
                     char *delay1 = trim($9);
                     char *delay2;
                     {
@@ -226,6 +235,7 @@ source:     TYPE NODE NODE SINE OPENBRACKET NUM NUM FREQ DELAY NUM CLOSEBRACKET
                     temp1.dcoffset = atof($6);
                     temp1.amplitude = atof($7);
                     temp1.f = atof(frequency2);
+                    temp1.unit = string(unit);
                     temp1.delay = atof(delay2);
                     temp1.dampingfactor=atof($10);
                     if(type[0]=='V')

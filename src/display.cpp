@@ -149,7 +149,7 @@ void display::capacitor(float rotateangle,float translatex,float translatey,stri
     outfile<<remaining;
 }
 
-void display::ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df)
+void display::ac_source(float rotateangle,float translatex,float translatey,string type,string name,float dcoffset,float amplitude,float frequency,float delay,float df,string unit)
 {
     string voltage = "\n<g \n id=\"g4164\" \n transform=\"translate("+to_string(translatex)+","+to_string(translatey)+") rotate("+to_string(rotateangle)+",0,0)\">"
     R"foo(
@@ -178,7 +178,7 @@ void display::ac_source(float rotateangle,float translatex,float translatey,stri
     <text x="-80" y="-8" font-size="3" fill="black" transform="rotate(-90,0,0) translate(50,4)">)foo"+
 	type+name+" SINE (";
     outfile<<voltage;    
-    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<"Khz "<<delay<<"S  "<<df<<")\n</text>\n</g>\n</g>";
+    outfile<<dcoffset<<" "<<amplitude<<" "<<frequency<<unit<<" "<<delay<<"S  "<<df<<")\n</text>\n</g>\n</g>";
 }
 
 void display::ground(float rotateangle,float translatex,float translatey,std::vector<int> uniq)

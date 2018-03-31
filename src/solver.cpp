@@ -200,7 +200,7 @@ void calculate(double f,char ch)
 {
     cx_mat Z = cx_mat(z,zeros(n + m,1));
     x = solve(A, Z);
-    cout<<"A is"<<A<<endl<<"Z is"<<Z<<endl<<"x is"<<x<<endl;
+    // cout<<"A is"<<A<<endl<<"Z is"<<Z<<endl<<"x is"<<x<<endl;
     result_temp.clear();
     for(int i=n;i<n+m;i++)
     {

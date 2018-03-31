@@ -4,7 +4,7 @@ display::display()
 {
     string start=R"foo(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <svg id="demo-tiger"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 800" version="1.1">
-    <g id="g4" fill="none" transform="translate(-300.000000,-350.000000) matrix(1.7656463,0,0,1.7656463,324.90716,255.00942)">
+    <g id="g4" fill="none" transform="translate(-350.000000,-600.000000) matrix(1.7656463,0,0,1.7656463,324.90716,255.00942)">
     )foo";
     outfile.open("output.svg");
     outfile<<start;
@@ -229,7 +229,7 @@ void display::ac_current(float rotateangle,float translatex,float translatey,str
 
 void display::ground(float rotateangle,float translatex,float translatey,std::vector<int> uniq)
 {
-    string ground ="\n<g\nid=\"layer1\" transform=\"translate("+to_string(translatex)+","+to_string(translatey)+")rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+")scale(0.7)\">\n<g transform=\"translate(-12,-3)\">";
+    string ground ="\n<g\nid=\"layer1\" transform=\"translate("+to_string(translatex)+","+to_string(translatey)+")rotate("+to_string(rotateangle)+","+to_string(translatex)+","+to_string(translatey)+")scale(0.7)\">\n<g transform=\"translate(-12.5,-3)\">";
     outfile<<ground;
     int pos=0;
     for (int i=0;i<uniq.size();i++)

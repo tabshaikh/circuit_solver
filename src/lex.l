@@ -19,11 +19,11 @@ closed_bracket  ")"
 
 {SPACE}+(NET[0-9]+|0)                                       { yylval.str=strdup(yytext); return NODE; }                                
                                 
-{SPACE}+[0-9]+(\.[0-9]+)?(K|N|M|P|U)?(H|F|ohm){SPACE}*           { yylval.str=strdup(yytext); return UNIT; }
+{SPACE}+[0-9]+(\.[0-9]+)?(K|N|M|P|U)?(H|F|ohm){SPACE}*      { yylval.str=strdup(yytext); return UNIT; }
                                 
 {SPACE}+(SINE)                                              { return SINE; }
 
-(([0-9]+\.[0-9]+)|[0-9]+)(K|N|M|P|U)?(hz){SPACE}+                      { yylval.str=strdup(yytext); return FREQ; }
+(([0-9]+\.[0-9]+)|[0-9]+)(K|N|M|P|U)?(hz){SPACE}+           { yylval.str=strdup(yytext); return FREQ; }
 
 (([0-9]+\.[0-9]+)|[0-9]+)(S){SPACE}+                        { yylval.str=strdup(yytext); return DELAY; }
                                                                                                                                                                                                                        

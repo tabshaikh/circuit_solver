@@ -5,3 +5,8 @@ rules for unit and types of units possible
 other rules
 
 rules for naming
+
+changed the resistor unit to ohm
+
+superposition principle applied
+

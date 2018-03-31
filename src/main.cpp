@@ -13,6 +13,11 @@ float offset=50;//offset of 50units
 int base=0,top=0;
 int flag=1;
 char *inputfile;
+extern vector <answer> result_final;
+int rcount=0,lcount=0,ccount=0,vcount=0,icount=0;
+ofstream outfile1;
+extern vector <source> voltage;       
+extern vector <source> current;       
 
 //------------------------------------------------------------------------------------------------------
 template<typename T, typename M, template<typename> class C = std::less>
@@ -43,24 +48,93 @@ member_comparer<T, M, C> make_member_comparer2(M T::*p)
 
 //----------------------------------------------------------------------------------------------
 
+int search_voltage_source(int name)
+{
+    for(int i=0;i<voltage.size();i++)
+    {
+        if(name==voltage[i].name)
+        {
+            return i;
+        }
+    }
+}
+int search_current_source(int name)
+{
+    for(int i=0;i<current.size();i++)
+    {
+        if(name==current[i].name)
+        {
+            return i;
+        }
+    }
+}
+
+void onclick(string image_name,double v1,double v2,double i1,double i2)
+{
+
+  string data=R"foo("<!DOCTYPE html>
+    <html>
+        <body>
+        <center>
+            <img src=")foo"+image_name+R"foo(" width="500" height="300">
+            <h3>V = )foo";
+    outfile1<<data;
+    outfile1<<v1<<" "<<v2<<"</h3>\n<h3>I = "<<i1<<" "<<i2<<"</h3>\n</center>\n</body>\n</html>";
+}
+
 void write_component(float netpositionx,float netpositiony)
-{            
+{   string fname="";
+    int va=-1;
+    int ia=-1;         
     switch(components[top].type)
     {
         case 'R':
-        d.resistor(0,netpositionx,netpositiony,"R",components[top].name,components[top].magnitude,components[top].unit);
+        fname="r"+to_string(rcount)+".html";
+        d.resistor(0,netpositionx,netpositiony,"R",components[top].name,components[top].magnitude,components[top].unit,fname);
+        outfile1.open(fname);
+        onclick("resistor.png",10,45,2,10);
+        outfile1.close();
+        rcount++;
         break;
         case 'L':
-        d.inductor(0,netpositionx,netpositiony,"L",components[top].name,components[top].magnitude,components[top].unit);
+        fname="l"+to_string(lcount)+".html";
+        d.inductor(0,netpositionx,netpositiony,"L",components[top].name,components[top].magnitude,components[top].unit,fname);
+        outfile1.open(fname);
+        onclick("inductor.png",10,45,2,10);
+        outfile1.close();
+        lcount++;
         break;
         case 'C':
-        d.capacitor(0,netpositionx,netpositiony,"C",components[top].name,components[top].magnitude,components[top].unit);
+        fname="c"+to_string(ccount)+".html";
+        d.capacitor(0,netpositionx,netpositiony,"C",components[top].name,components[top].magnitude,components[top].unit,fname);
+        outfile1.open(fname);
+        onclick("capacitor.png",10,45,2,10);
+        outfile1.close();
+        ccount++;
         break;
         case 'V':
-        d.ac_source(90,netpositionx+25,netpositiony-7,"V",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor);
+        fname="v"+to_string(vcount)+".html";
+        va=search_voltage_source(stoi(components[top].name));
+        if(voltage[va].start>voltage[va].end)
+        d.ac_source(90,netpositionx+25,netpositiony-7,"V",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,true);
+        else
+        d.ac_source(90,netpositionx+25,netpositiony-7,"V",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,false);
+        outfile1.open(fname);
+        onclick("voltage_source.png",10,45,2,10);
+        outfile1.close();
+        vcount++;
         break;                                                                                                                                                                                      
         case 'I':
-        d.ac_source(90,netpositionx+25,netpositiony-7,"I",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor);
+        fname="i"+to_string(icount)+".html";
+        ia=search_current_source(stoi(components[top].name));
+        if(current[ia].start>current[ia].end)
+        d.ac_current(90,netpositionx+25,netpositiony-7,"I",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,true);
+        else
+        d.ac_current(90,netpositionx+25,netpositiony-7,"I",components[top].name,components[top].dcoffset,components[top].amplitude,components[top].f,components[top].delay,components[top].dampingfactor,fname,false);
+        outfile1.open(fname);
+        onclick("current_source.png",10,45,2,10);
+        outfile1.close();
+        icount++;
         break; 
     }
 }

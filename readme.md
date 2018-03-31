@@ -1,6 +1,6 @@
 # AC Circuit Solver
 This is a AC circuit solver program. It draws a SVG image of the circuit given as input in the *top.cir* file. To see this file in the browser, you can open *Circuit.html*. Please read the caution and guidelines to run the program.  
-The Solved values of the components are saved in the file *result.txt*. ALso you can see the solved values of each components by clicking the svg. This will open a new tab showing the detailed values of that components.
+The Solved values of the components are saved in the file *result.txt*. Also you can see the solved values of each components by clicking the svg. This will open a new tab showing the detailed values of that components.
 
 ## Running the code.
 **To clean the previous output file and logs.**
@@ -54,7 +54,7 @@ V1 Net1 0 SINE ( 0.0 1.0 10Khz 0.0S 0.0 )
 - We are using firefox to open the SVG. Make sure that firefox is installed and updated.
 - Install armadillo, LAPACK and BLAS.
 ### To install armadillo, LAPACK and BLAS
-- Install LAPACK and BLAS via the folllowing insttruction:-
+- Install LAPACK and BLAS via the folllowing insttruction :-
 ```
 sudo apt-get install liblapack-dev
 sudo apt-get install libblas-dev
@@ -87,7 +87,7 @@ If you have access to root/administrator/superuser privileges
   C++ headers and library files.
 
 ## Caution
-1. Some errors are faced using chrome to open the Circuit.html as chrome browser shows only one frame at a time.(prefer only mozilla)
+1. Some errors are faced using chrome to open the Circuit.html as chrome browser shows only one frame at a time.(prefer only mozilla).
 2. If Mozilla Firefox failed to zoom the image, please do hard reset ( Ctrl + Shift + R ) or reload the frame.
 3. Please ensure that you have flash player extension enabled in Mozilla.
 4. Sometimes there can error in which thunbnail fails to work, just keep on trying hard reset for that.
